@@ -1,13 +1,17 @@
-# Welcome to Cloud Functions for Firebase for Python!
-# To get started, simply uncomment the below code or create your own.
-# Deploy with `firebase deploy`
+from firebase_functions import db_fn, https_fn
+from firebase_admin import initialize_app, db
+from werkzeug.http import http_date
 
-from firebase_functions import https_fn
-from firebase_admin import initialize_app
+app = initialize_app()
 
-# initialize_app()
-#
-#
-# @https_fn.on_request()
-# def on_request_example(req: https_fn.Request) -> https_fn.Response:
-#     return https_fn.Response("Hello world!")
+
+@https_fn.on_request()
+def addmessageHello(req: https_fn.Request) -> https_fn.Response:
+    original = req.args.get("text")
+    if original is None:
+        return https_fn.Response("No text parameter provided", status=400)
+
+    ref = db.reference("message")
+    new_ref = ref.push({"original" : original})
+
+    return https_fn.Response(f"Message with ID {new_ref.key} added.")
