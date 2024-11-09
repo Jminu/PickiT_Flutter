@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import './AuthManager.dart';
+import './KeywordManager.dart';
+import './UserManager.dart';
+import './Keyword.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +16,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     var authManager = AuthManager();
-    authManager.registerUser("s9430939", "1234");
+    authManager.registerUser("minu", "1234");
 
-    authManager.loginUser("s9430939", "1234");
+    User user = User("minu", "1234");
+    KeywordManager keywordmanager = KeywordManager(user);
+    Keyword keyword = Keyword("삼전", false);
+    keywordmanager.addKeyword(keyword);
 
     return MaterialApp(
       home: Scaffold(
