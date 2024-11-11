@@ -5,7 +5,9 @@ import './KeywordManager.dart';
 import './UserManager.dart';
 import './Keyword.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -14,7 +16,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Firebase.initializeApp();
     var authManager = AuthManager();
     authManager.registerUser("minu", "1234");
 
