@@ -24,6 +24,11 @@ class MyApp extends StatelessWidget {
     Keyword keyword = Keyword("삼전", false);
     keywordmanager.addKeyword(keyword);
 
+    keyword = Keyword("엘지", false);
+    keywordmanager.addKeyword(keyword);
+
+    user.getUserKeywords();
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(

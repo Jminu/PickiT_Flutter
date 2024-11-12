@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 import './Keyword.dart';
 
 class User {
@@ -23,7 +25,17 @@ class User {
     this.userPwd = userPwd;
   }
 
-  List<Keyword> getUserKeywords() {
-    return this.userKeywords;
+  void getUserKeywords() async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("/users/${userId}/keywords");
+
+    final snapshot = await ref.get(); //keyword스냅샷 가져옴
+
+    if (snapshot.exists) {
+      print(snapshot);
+    } else {
+      //존재안하면
+      print("No data!");
+    }
   }
 }
