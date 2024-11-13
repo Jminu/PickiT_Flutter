@@ -25,7 +25,7 @@ class User {
     this.userPwd = userPwd;
   }
 
-  Future<void> getUserKeywords() async {
+  Future<List<Map<dynamic, dynamic>>> getUserKeywords() async {
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("/users/${userId}/keywords");
 
@@ -39,9 +39,11 @@ class User {
         userKeywordList.add(keyWordMap);
       }
       print(userKeywordList);
+      return userKeywordList;
     } else {
       //존재안하면
       print("No data!");
+      return [];
     }
   }
 }
