@@ -1,17 +1,38 @@
 from firebase_functions import db_fn, https_fn
 from firebase_admin import initialize_app, db
-from werkzeug.http import http_date
 
+# import feedparser
+# print(feedparser.__version__)
+
+# firebase admin SDK초기화
 app = initialize_app()
 
+RSS_FEEDS = [
+    "https://news.google.com/rss",  # Google News
+    "https://rss.cnn.com/rss/edition.rss",  # CNN
+]
 
+
+# userId가져옴
 @https_fn.on_request()
-def addmessageHello(req: https_fn.Request) -> https_fn.Response:
-    original = req.args.get("text")
-    if original is None:
-        return https_fn.Response("No text parameter provided", status=400)
+def fetchUserId(request: https_fn.Request) -> https_fn.Response:
+    userId = request.form.get("userId")
+    if not userId:
+        return https_fn.Response("userId가 제공되지 않았음", 400)
 
-    ref = db.reference("message")
-    new_ref = ref.push({"original" : original})
+    print({userId} + "를 성공적으로 받음")
+    return https_fn.Response(userId, status=200)
 
-    return https_fn.Response(f"Message with ID {new_ref.key} added.")
+
+# user의 키워드 목록 가져옴
+@https_fn.on_request()
+def fetchUserKeywordList(requset: https_fn.Request) -> https_fn.Response:
+    userId = requset.form.get("userId")
+    if not userId:
+        return https_fn.Response("userId가 제공되지 않았음", 400)
+
+    userRef = db.reference(f"/users/${userId}/keywords")  # 유저의 키워드목록 참조
+    snapshot = userRef.get()  # 스냅샷
+    if not snapshot:
+        return https_fn.Response("키워드 목록 없음", status=404)
+
