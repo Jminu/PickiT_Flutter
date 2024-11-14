@@ -15,6 +15,14 @@ void main() async {
 
   final User user = User("minu", "1234");
   setLoggedInUserId(user.userId);
+  //Keyword keyword = Keyword("삼전", true);
+  KeywordManager km = KeywordManager(user);
+
+  //Keyword keyword2 = Keyword("엘지", true);
+  //km.addKeyword(keyword2);
+
+  //km.addKeyword(keyword);
+
   final userKeywordList = await user.getUserKeywords(); //유저의 키워드 목록 가져오는것을 대기
   print(userKeywordList);
 

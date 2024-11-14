@@ -96,4 +96,9 @@ class KeywordManager {
       print("키워드 목록 비어있음");
     }
   }
+
+  //
+  Future<void> fetchUserKeywordList() {
+
+  }
 }
