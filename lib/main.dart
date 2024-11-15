@@ -13,23 +13,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
 
-  final User user = User("minu", "1234");
-  setLoggedInUserId(user.userId);
-  //Keyword keyword = Keyword("삼전", true);
+  AuthManager am = AuthManager();
+  User user = User("minu", "1234");
+  am.loginUser(user.userId, user.userPwd); //로그인
+
+  Keyword keyword = Keyword("삼전", true);
+  Keyword keyword2 = Keyword("엘지", true);
+  Keyword keyword3 = Keyword("하이닉스", true);
+  //
   KeywordManager km = KeywordManager(user);
-
-  //Keyword keyword2 = Keyword("엘지", true);
-  //km.addKeyword(keyword2);
-
-  //km.addKeyword(keyword);
-
-  final userKeywordList = await user.getUserKeywords(); //유저의 키워드 목록 가져오는것을 대기
-  print(userKeywordList);
+  km.addKeyword(keyword);
+  km.addKeyword(keyword2);
+  km.addKeyword(keyword3);
 
   runApp(const MyApp());
-  // 앱 실행 후 2초마다 fetchUserId 호출
+  //앱 실행 후 2초마다 fetchUserId 호출
   Timer.periodic(Duration(seconds: 5), (timer) {
-    fetchUserId();
+    km.fetchUserKeywordList();
   });
 }
 

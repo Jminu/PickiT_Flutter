@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-
+import 'package:http/http.dart' as http;
 import './global.dart';
 import './Keyword.dart';
 import './UserManager.dart';
@@ -10,8 +10,8 @@ class KeywordManager {
   //생성자
   KeywordManager(this.user);
 
-  //키워드 추가
-  void addKeyword(Keyword keyWord) {
+  //키워드 추가(json형식으로 저장)
+  Future<void> addKeyword(Keyword keyWord) async {
     DatabaseReference ref = FirebaseDatabase.instance
         .ref("users/${this.user.userId}/keywords")
         .push();
@@ -22,7 +22,7 @@ class KeywordManager {
       "isActivated": keyWord.isActivated.toString()
     };
 
-    ref.set(mapKeyword);
+    await ref.set(mapKeyword);
 
     print("키워드 추가 완료!");
   }
@@ -64,7 +64,7 @@ class KeywordManager {
         var child = snapshot.children.elementAt(i);
 
         if (child.child("keyWord").value == keyWord.keyWord) {
-          await child.ref.update({"isActivated": true});
+          await child.ref.update({"isActivated": "true"});
           print(keyWord.keyWord + "를 활성화 완료");
           return;
         }
@@ -86,7 +86,7 @@ class KeywordManager {
         var child = snapshot.children.elementAt(i);
 
         if (child.child("keyWord").value == keyWord.keyWord) {
-          child.ref.update({"isActivated": false});
+          await child.ref.update({"isActivated": "false"});
           print(keyWord.keyWord + "를 비활성화 완료");
           return;
         }
@@ -97,8 +97,19 @@ class KeywordManager {
     }
   }
 
-  //
-  Future<void> fetchUserKeywordList() {
+  Future<void> fetchUserKeywordList() async {
+    String? userId = getLoggedInUserId(); //userId가져오고(현재 로그인 되어있는)
+    final response = await http.post(
+      Uri.parse("https://fetchuserkeywordlist-z5lahfby6q-uc.a.run.app"),
+      body: {
+        'userId': userId,
+      },
+    );
 
+    if (response.statusCode == 200) {
+      print("서버로 유저아이디 성공적으로 보냄");
+    } else {
+      print("서버로 유저아이디 보내기 실패 error code : ${response.statusCode}");
+    }
   }
 }
