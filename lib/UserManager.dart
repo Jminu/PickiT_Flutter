@@ -38,7 +38,7 @@ class User {
         Map<dynamic, dynamic> keyWordMap = child.value as Map<dynamic, dynamic>;
         userKeywordList.add(keyWordMap);
       }
-      print(userKeywordList);
+      //print(userKeywordList);
       return userKeywordList;
     } else {
       //존재안하면
