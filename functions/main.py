@@ -53,7 +53,7 @@ def fetchUserKeywordList(
         if not snapshot:
             return https_fn.Response("키워드 목록 없음", status=404)
 
-        userKeywordList = [] #snapshot을 리스트로
+        userKeywordList = []  # snapshot을 리스트로
         for key, value in snapshot.items():
             userKeywordList.append(value)
 
