@@ -8,6 +8,7 @@ import './KeywordManager.dart';
 import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
+import './Controller/GetFilteredFeeds.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,19 +18,20 @@ void main() async {
   User user = User("minu", "1234");
   am.loginUser(user.userId, user.userPwd); //로그인
 
-  Keyword keyword = Keyword("삼전", true);
-  Keyword keyword2 = Keyword("엘지", true);
-  Keyword keyword3 = Keyword("하이닉스", true);
+  Keyword keyword = Keyword("삼성", true);
+  // Keyword keyword2 = Keyword("엘지", true);
+  // Keyword keyword3 = Keyword("하이닉스", true);
   //
   KeywordManager km = KeywordManager(user);
-  km.addKeyword(keyword);
-  km.addKeyword(keyword2);
-  km.addKeyword(keyword3);
+  //km.addKeyword(keyword);
+  // km.addKeyword(keyword2);
+  // km.addKeyword(keyword3);
 
   runApp(const MyApp());
+
   //앱 실행 후 2초마다 fetchUserId 호출
-  Timer.periodic(Duration(seconds: 5), (timer) {
-    km.fetchUserKeywordList();
+  Timer.periodic(Duration(seconds: 10), (timer) {
+    getFilteredFeeds();
   });
 }
 
