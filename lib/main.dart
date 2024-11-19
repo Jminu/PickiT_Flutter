@@ -23,7 +23,7 @@ void main() async {
   // Keyword keyword3 = Keyword("하이닉스", true);
   //
   KeywordManager km = KeywordManager(user);
-  km.addKeyword(keyword);
+  //km.addKeyword(keyword);
   // km.addKeyword(keyword2);
   // km.addKeyword(keyword3);
 
