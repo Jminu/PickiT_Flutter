@@ -1,22 +1,6 @@
 import feedparser
-import certifi
-import ssl
-import urllib.request
 from firebase_functions import https_fn
 from UserInfo import getUserKeywordList
-
-# SSL 인증서를 certifi에서 제공하는 것으로 사용하도록 SSLContext 설정
-# ssl_context = ssl.create_default_context(cafile=certifi.where())
-
-ssl_context = ssl.create_default_context()
-ssl_context.check_hostname = False
-ssl_context.verify_mode = ssl.CERT_NONE
-
-# 언론사 리스트
-# RSS_FEED = [
-#     "https://www.chosun.com/arc/outboundfeeds/rss/?outputType=xml",
-#     "http://www.yonhapnewstv.co.kr/browse/feed/"
-# ]
 
 RSS_FEED = [
     "https://www.chosun.com/arc/outboundfeeds/rss/?outputType=xml",  # 조선
@@ -31,10 +15,7 @@ def fetchRSSfeed() -> list:
     allArticles = []
     for feedUrl in RSS_FEED:
         try:
-            with urllib.request.urlopen(feedUrl,
-                                        context=ssl_context) as response:
-                data = response.read()
-            feed = feedparser.parse(data)  # 피드 데이터를 파싱
+            feed = feedparser.parse(feedUrl)  # 피드 데이터를 파싱
             for entry in feed.entries:  # 각 항목에 대한 처리
                 article = {
                     "title": entry.title,  # 파싱한 기사 타이틀
@@ -59,5 +40,5 @@ def filterRSSfeed(request: https_fn.Request) -> list:
         for keyword in userKeywordList:
             if keyword["keyWord"].lower() in title.lower():
                 filteredList.append(article)  # 있으면 리스트에 추가
-                break;
+                break
     return filteredList
