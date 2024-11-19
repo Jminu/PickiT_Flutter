@@ -34,10 +34,12 @@ void main() async {
 
   runApp(const MyApp());
 
+  getFilteredFeeds();
+
   //앱 실행 후 2초마다 fetchUserId 호출
-  Timer.periodic(Duration(seconds: 10), (timer) {
-    getFilteredFeeds();
-  });
+  // Timer.periodic(Duration(seconds: 10), (timer) {
+  //   getFilteredFeeds();
+  // });
 }
 
 class MyApp extends StatelessWidget {
