@@ -1,31 +1,61 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import './AuthManager.dart';
+import 'package:pickit_flutter/screens/main_screens.dart';
+import 'package:pickit_flutter/theme.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import './AuthManager.dart';
+import './KeywordManager.dart';
+import './UserManager.dart';
+import './Keyword.dart';
+import '/global.dart';
+import './Controller/GetFilteredFeeds.dart';
+import 'package:pickit_flutter/pages/login_page.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
+
+  AuthManager am = AuthManager();
+  User user = User("minu", "1234");
+  am.loginUser(user.userId, user.userPwd); //로그인
+
+  Keyword keyword = Keyword("삼성", true);
+  // Keyword keyword2 = Keyword("엘지", true);
+  // Keyword keyword3 = Keyword("하이닉스", true);
+  //
+  KeywordManager km = KeywordManager(user);
+  //km.addKeyword(keyword);
+  // km.addKeyword(keyword2);
+  // km.addKeyword(keyword3);
+
   runApp(const MyApp());
+
+  getFilteredFeeds();
+
+  //앱 실행 후 2초마다 fetchUserId 호출
+  // Timer.periodic(Duration(seconds: 10), (timer) {
+  //   getFilteredFeeds();
+  // });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Firebase.initializeApp();
-    var authManager = AuthManager();
-    authManager.registerUser("s9430939", "1234");
-
-    authManager.loginUser("s9430939", "1234");
-
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('FireBase'),
-        ),
-        body: const Center(
-          child: Text('Firebase TEST'),
-        ),
-      ),
+      // 1. 테마 설정
+      debugShowCheckedModeBanner: false,
+      home: MainScreens(),
+      theme: theme(),
+      /*initialRoute: "/login",
+      routes: {
+        "/login": (context) => const LoginPage(),
+      },*/
     );
   }
 }
