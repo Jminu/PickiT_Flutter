@@ -21,8 +21,6 @@ class AuthManager {
       final data = event.snapshot.value;
 
       if (data != null && data is Map<Object?, Object?>) {
-        //final userData = Map<String, dynamic>.from(data);
-
         if (data["userId"] == userId && data["userPwd"] == userPwd) {
           setLoggedInUserId(userId); //로그인 처리
           print("로그인 성공!");

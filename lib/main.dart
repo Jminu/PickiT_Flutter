@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pickit_flutter/screens/main_screens.dart';
 import 'package:pickit_flutter/theme.dart';
@@ -7,22 +11,33 @@ import './AuthManager.dart';
 import './KeywordManager.dart';
 import './UserManager.dart';
 import './Keyword.dart';
+import '/global.dart';
+import './Controller/GetFilteredFeeds.dart';
 import 'package:pickit_flutter/pages/login_page.dart';
 
 void main() async {
-  // Firebase 초기화
-  // WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
 
-  //var authManager = AuthManager();
-  // authManager.registerUser("minu", "1234");
+  AuthManager am = AuthManager();
+  User user = User("minu", "1234");
+  am.loginUser(user.userId, user.userPwd); //로그인
 
-  //User user = User("minu", "1234");
-  //KeywordManager keywordManager = KeywordManager(user);
-  //Keyword keyword = Keyword("삼전", false);
-  //keywordManager.addKeyword(keyword);
+  Keyword keyword = Keyword("삼성", true);
+  // Keyword keyword2 = Keyword("엘지", true);
+  // Keyword keyword3 = Keyword("하이닉스", true);
+  //
+  KeywordManager km = KeywordManager(user);
+  //km.addKeyword(keyword);
+  // km.addKeyword(keyword2);
+  // km.addKeyword(keyword3);
 
   runApp(const MyApp());
+
+  //앱 실행 후 2초마다 fetchUserId 호출
+  Timer.periodic(Duration(seconds: 10), (timer) {
+    getFilteredFeeds();
+  });
 }
 
 class MyApp extends StatelessWidget {

@@ -1,17 +1,25 @@
+import json
+
 from firebase_functions import db_fn, https_fn
 from firebase_admin import initialize_app, db
-from werkzeug.http import http_date
+import logging
 
+from FeedParser import filterRSSfeed
+
+# firebase admin SDK초기화
 app = initialize_app()
+
+# logging 설정
+logging.basicConfig(level=logging.INFO)  # 로그 레벨 설정
 
 
 @https_fn.on_request()
-def addmessageHello(req: https_fn.Request) -> https_fn.Response:
-    original = req.args.get("text")
-    if original is None:
-        return https_fn.Response("No text parameter provided", status=400)
+def getFilteredNewsList(request: https_fn.Request) -> https_fn.Response:
+    try:
+        filteredList = filterRSSfeed(request)  # RSS feed에서 키워드 관련된 거 가져옴(리스트로)
+        print(filteredList)
+        # 리스트를 dart에 json으로 반환
+        return https_fn.Response(json.dumps(filteredList), status=200, mimetype="application/json")
 
-    ref = db.reference("message")
-    new_ref = ref.push({"original" : original})
-
-    return https_fn.Response(f"Message with ID {new_ref.key} added.")
+    except ValueError as e:
+        return https_fn.Response(str(e), status=400)
