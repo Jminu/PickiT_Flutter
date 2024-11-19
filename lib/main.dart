@@ -3,12 +3,17 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pickit_flutter/screens/main_screens.dart';
+import 'package:pickit_flutter/theme.dart';
+
+import 'package:firebase_core/firebase_core.dart';
 import './AuthManager.dart';
 import './KeywordManager.dart';
 import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
+import 'package:pickit_flutter/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,26 +34,28 @@ void main() async {
 
   runApp(const MyApp());
 
+  getFilteredFeeds();
+
   //앱 실행 후 2초마다 fetchUserId 호출
-  Timer.periodic(Duration(seconds: 10), (timer) {
-    getFilteredFeeds();
-  });
+  // Timer.periodic(Duration(seconds: 10), (timer) {
+  //   getFilteredFeeds();
+  // });
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Firebase'),
-        ),
-        body: const Center(
-          child: Text('Firebase TEST'), // 기본 텍스트만 표시
-        ),
-      ),
+      // 1. 테마 설정
+      debugShowCheckedModeBanner: false,
+      home: MainScreens(),
+      theme: theme(),
+      /*initialRoute: "/login",
+      routes: {
+        "/login": (context) => const LoginPage(),
+      },*/
     );
   }
 }
