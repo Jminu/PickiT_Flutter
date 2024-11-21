@@ -24,22 +24,12 @@ void main() async {
   am.loginUser(user.userId, user.userPwd); //로그인
 
   Keyword keyword = Keyword("삼성", true);
-  // Keyword keyword2 = Keyword("엘지", true);
-  // Keyword keyword3 = Keyword("하이닉스", true);
-  //
+
   KeywordManager km = KeywordManager(user);
-  //km.addKeyword(keyword);
-  // km.addKeyword(keyword2);
-  // km.addKeyword(keyword3);
 
   runApp(const MyApp());
 
   getFilteredFeeds();
-
-  //앱 실행 후 2초마다 fetchUserId 호출
-  // Timer.periodic(Duration(seconds: 10), (timer) {
-  //   getFilteredFeeds();
-  // });
 }
 
 class MyApp extends StatelessWidget {
