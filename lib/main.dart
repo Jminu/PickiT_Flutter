@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:pickit_flutter/screens/main_screens.dart';
 import 'package:pickit_flutter/theme.dart';
 
@@ -13,6 +14,7 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
+import './News.dart';
 import 'package:pickit_flutter/pages/login_page.dart';
 
 void main() async {
@@ -35,10 +37,16 @@ void main() async {
    * 모두가 사용하면 사용량이 많아져서 요금을 내야합니다. 따라서 제가 깃헙에 올릴때는 이부분 주석처리하고
    * 올리겠습니다.
    */
-  //앱 실행 후 2초마다 fetchUserId 호출
-  Timer.periodic(Duration(seconds: 10), (timer) {
-    getFilteredFeeds();
-  });
+
+  // Timer.periodic(Duration(seconds: 10), (timer) async {
+  //   List<dynamic> newsList = await getFilteredFeeds();
+  //   for(var i = 0; i < newsList.length; i++) {
+  //     print("======================");
+  //     print(newsList[i].title);
+  //     print(newsList[i].link);
+  //     print(newsList[i].published);
+  //   }
+  // });
 }
 
 class MyApp extends StatelessWidget {
