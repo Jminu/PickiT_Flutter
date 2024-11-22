@@ -96,20 +96,4 @@ class KeywordManager {
       print("키워드 목록 비어있음");
     }
   }
-
-  Future<void> fetchUserKeywordList() async {
-    String? userId = getLoggedInUserId(); //userId가져오고(현재 로그인 되어있는)
-    final response = await http.post(
-      Uri.parse("https://fetchuserkeywordlist-z5lahfby6q-uc.a.run.app"),
-      body: {
-        'userId': userId,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      print("서버로 유저아이디 성공적으로 보냄");
-    } else {
-      print("서버로 유저아이디 보내기 실패 error code : ${response.statusCode}");
-    }
-  }
 }

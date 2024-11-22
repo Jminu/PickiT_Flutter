@@ -14,7 +14,7 @@ Future<void> getFilteredFeeds() async {
 
   if (response.statusCode == 200) {
     print("서버로 userId 보내기 성공");
-    List<dynamic> filteredFeeds = jsonDecode(response.body);
+    List<dynamic> filteredFeeds = jsonDecode(response.body); //응답받은 Json을 객체로 list에 저장
 
     for(var feed in filteredFeeds) {
       print("피드 제목: ${feed["title"]}");
