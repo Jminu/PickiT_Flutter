@@ -21,8 +21,9 @@ class AuthManager {
     if (snapshot.exists) {
       //DB에 아이디가 있다면
       final data = snapshot.value; //스냅샷의 데이터를 저장
+      print("Snapshot value: ${snapshot.value}");
 
-      if (data != null && data is Map<String, String>) {
+      if (data != null && data is Map<dynamic, dynamic>) {
         //아이디 비밀번호, DB에 있는 것과 맞는지 확인
         if (data["userId"] == userId && data["userPwd"] == userPwd) {
           setLoggedInUserId(userId);
