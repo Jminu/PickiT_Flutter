@@ -21,12 +21,7 @@ void main() async {
 
   AuthManager am = AuthManager();
   User user = User("minu", "1234");
-  am.loginUser(user.userId, user.userPwd); //로그인
-
-  /**
-   * 이 부분 원래는 DB건드는 부분인데, 여러분 테스트 위해서 지웠습니다,
-   * 테스트 자유롭게 하시면 됩니다.
-   */
+  bool isLoggedIn = await am.loginUser(user.userId, user.userPwd); //로그인
 
   runApp(const MyApp());
 
