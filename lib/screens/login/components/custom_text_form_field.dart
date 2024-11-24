@@ -3,8 +3,10 @@ import 'package:pickit_flutter/size.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String text;
+  final TextEditingController controller; // 1. 컨트롤러 추가
 
-  const CustomTextFormField(this.text, {Key? key}) : super(key: key);
+  const CustomTextFormField(this.text, {Key? key, required this.controller})
+      : super(key: key); // 2. 생성자에서 컨트롤러 받기
 
   @override
   Widget build(BuildContext context) {
@@ -14,28 +16,24 @@ class CustomTextFormField extends StatelessWidget {
         Text(text),
         SizedBox(height: smallGap),
         TextFormField(
-          validator: (value) => value!.isEmpty
-              ? "Please enter some text"
-              : null, // 1. 값이 없으면 Please enter some text 경고 화면 표시
-          obscureText:
-              // 2. 해당 TextFormField가 비밀번호 입력 양식이면 **** 처리 해주기
-              text == "Password" ? true : false,
+          controller: controller, // 3. 컨트롤러를 텍스트 폼 필드에 연결
+          validator: (value) =>
+              value!.isEmpty ? "Please enter some text" : null,
+          obscureText: text == "Password" ? true : false,
+
+          //디자인부분
           decoration: InputDecoration(
             hintText: "Enter $text",
             enabledBorder: OutlineInputBorder(
-              // 3. 기본 TextFormField 디자인
               borderRadius: BorderRadius.circular(20),
             ),
             focusedBorder: OutlineInputBorder(
-              // 4. 손가락 터치시 TextFormField 디자인
               borderRadius: BorderRadius.circular(20),
             ),
             errorBorder: OutlineInputBorder(
-              // 5. 에러발생시 TextFormField 디자인
               borderRadius: BorderRadius.circular(20),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              // 5. 에러가 발생 후 손가락을 터치했을 때 TextFormField 디자인
               borderRadius: BorderRadius.circular(20),
             ),
           ),
