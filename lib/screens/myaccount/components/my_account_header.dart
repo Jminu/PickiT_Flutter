@@ -44,7 +44,7 @@ class MyAccountHeader extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(32.5),
                 child: Image.network(
-                  "http://picsum.photos/200/100",
+                  "https://picsum.photos/200/100",
                   fit: BoxFit.cover,
                 ),
               ),
