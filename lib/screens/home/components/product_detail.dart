@@ -16,14 +16,9 @@ class ProductDetail extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(product.title, style: textTheme().bodyLarge),
+          Text(product.title, style: textTheme().titleLarge),
           const SizedBox(height: 4.0),
-          Text('${product.address} • ${product.publishedAt}'),
-          const SizedBox(height: 4.0),
-          Text(
-            '${numberFormat(product.price)}원',
-            style: textTheme().displayMedium,
-          ),
+          Text("   : 요약된 내용 들어갈 예정", style: textTheme().titleMedium),
           const Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
