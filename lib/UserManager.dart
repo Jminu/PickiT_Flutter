@@ -1,11 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 
 import './Keyword.dart';
+import './News.dart';
 
 class User {
   String userId;
   String userPwd;
   List<Keyword> userKeywords = [];
+  List<News> myNews = []; //스크랩 해놓은 뉴스
 
   User(this.userId, this.userPwd);
 
@@ -23,27 +25,5 @@ class User {
 
   void setUserPwd() {
     this.userPwd = userPwd;
-  }
-
-  Future<List<Map<dynamic, dynamic>>> getUserKeywords() async {
-    DatabaseReference ref =
-        FirebaseDatabase.instance.ref("/users/${userId}/keywords");
-
-    final snapshot = await ref.get(); //keyword스냅샷 가져옴
-    List<Map<dynamic, dynamic>> userKeywordList = [];
-
-    if (snapshot.exists) {
-      for (var i = 0; i < snapshot.children.length; i++) {
-        var child = snapshot.children.elementAt(i);
-        Map<dynamic, dynamic> keyWordMap = child.value as Map<dynamic, dynamic>;
-        userKeywordList.add(keyWordMap);
-      }
-      //print(userKeywordList);
-      return userKeywordList;
-    } else {
-      //존재안하면
-      print("No data!");
-      return [];
-    }
   }
 }
