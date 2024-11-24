@@ -14,23 +14,53 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-        children: [
-        Image.asset(
-        "assets/logo.png",
-        height: 50,
-        width: 125,
-    ),
-    ],
-    ),
+          children: [
+            Image.asset(
+              "assets/logo.png",
+              height: 50,
+              width: 125,
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(CupertinoIcons.search),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("검색 기능 준비 중입니다.")),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(CupertinoIcons.bell),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("알림 기능 준비 중입니다.")),
+              );
+            },
+          ),
+        ],
+        bottom: const PreferredSize(
+          preferredSize: Size.fromHeight(0.5),
+          child: Divider(
+            thickness: 0.5,
+            height: 0.5,
+            color: Colors.grey,
+          ),
+        ),
       ),
       body: ListView.separated(
+        separatorBuilder: (context, index) => const Divider(
+          height: 0,
+          indent: 16,
+          endIndent: 16,
+          color: Colors.grey,
+        ),
         itemCount: productList.length,
-        separatorBuilder: (context, index) => Divider(),
         itemBuilder: (context, index) {
           final product = productList[index];
           return GestureDetector(
             onTap: () {
-              // 클릭 시 ArticleScreen으로 이동
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -45,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             },
-            child: ProductItem(product: product), // ProductItem 위젯
+            child: ProductItem(product: product),
           );
         },
       ),

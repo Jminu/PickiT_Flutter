@@ -46,15 +46,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // 1. 테마 설정
       debugShowCheckedModeBanner: false,
-      home: MainScreens(),
+      initialRoute: "/login", // 초기 화면 경로 설정
       theme: theme(),
-      initialRoute: "/login",
       routes: {
         "/login": (context) => const LoginPage(),
         "/register": (context) => const RegisterPage(), // 회원가입 페이지
-        "/home": (context) => HomeScreen(), // Product 화면
+        "/home": (context) => const MainScreens(), // MainScreens로 연결
       },
     );
   }
