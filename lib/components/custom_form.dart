@@ -18,7 +18,7 @@ class CustomForm extends StatelessWidget {
           SizedBox(height: mediumGap),
           CustomTextFormField("Password"),
           SizedBox(height: largeGap),
-          // 3. TextButton 추가
+          // 3. Login 버튼
           TextButton(
             onPressed: () {
               // 4. 유효성 검사
@@ -27,6 +27,14 @@ class CustomForm extends StatelessWidget {
               }
             },
             child: Text("Login"),
+          ),
+          SizedBox(height: mediumGap), // 간격 추가
+          // 4. Register 버튼 추가
+          TextButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/register"); // 회원가입 페이지로 이동
+            },
+            child: Text("Register"),
           ),
         ],
       ),

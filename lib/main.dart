@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pickit_flutter/pages/register_page.dart';
+import 'package:pickit_flutter/screens/home/home_screen.dart';
 import 'package:pickit_flutter/screens/main_screens.dart';
 import 'package:pickit_flutter/theme.dart';
 
@@ -14,6 +16,8 @@ import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
 import 'package:pickit_flutter/pages/login_page.dart';
+
+import 'models/product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,10 +50,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: MainScreens(),
       theme: theme(),
-      /*initialRoute: "/login",
+      initialRoute: "/login",
       routes: {
         "/login": (context) => const LoginPage(),
-      },*/
+        "/register": (context) => const RegisterPage(), // 회원가입 페이지
+        "/home": (context) => HomeScreen(), // Product 화면
+      },
     );
   }
 }

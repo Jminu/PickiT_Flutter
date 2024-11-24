@@ -9,16 +9,30 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      appBar: AppBar(
+        title: Text(
+          "회원가입",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Spacer(flex: 1), // 로고가 상단에 위치하도록 설정
-            // Spacer로 위쪽 여백을 추가하여 로고가 상단에 위치
-            Logo("Login"),
-            SizedBox(height: largeGap), // 로고와 로그인 폼 사이의 간격
-            CustomForm2(),
-            Spacer(flex: 3), // 로그인 폼 아래쪽 여백을 추가하여 균형 잡기
+            // 상단 여백
+            SizedBox(height: largeGap),
+            Logo("회원가입"), // 로고
+            SizedBox(height: largeGap), // 간격 추가
+            // 커스텀 폼
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: CustomForm2(),// CustomForm2에서 Register 버튼으로 ProductPage로 이동
+            ),
+            // 추가 여백
+            SizedBox(height: largeGap),
           ],
         ),
       ),
