@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/article.dart';
 import '../../../models/product.dart';
-import '../../../pages/article_screen.dart';
-import 'product_detail.dart';
+import '../../login/article_screen.dart';
 
 
 class ProductItem extends StatelessWidget {

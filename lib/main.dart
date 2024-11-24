@@ -3,8 +3,9 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pickit_flutter/pages/register_page.dart';
 import 'package:pickit_flutter/screens/home/home_screen.dart';
+import 'package:pickit_flutter/screens/login/login_screen.dart';
+import 'package:pickit_flutter/screens/login/register_page.dart';
 import 'package:pickit_flutter/screens/main_screens.dart';
 import 'package:pickit_flutter/theme.dart';
 
@@ -15,7 +16,6 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
-import 'package:pickit_flutter/pages/login_page.dart';
 
 import 'models/product.dart';
 
