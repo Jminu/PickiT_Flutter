@@ -13,6 +13,7 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
+import './News.dart';
 import 'package:pickit_flutter/pages/login_page.dart';
 
 void main() async {
@@ -22,7 +23,6 @@ void main() async {
   AuthManager am = AuthManager();
   User user = User("minu", "1234");
   bool isLoggedIn = await am.loginUser(user.userId, user.userPwd); //로그인
-
 
   runApp(const MyApp());
 
