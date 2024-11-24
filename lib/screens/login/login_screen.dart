@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pickit_flutter/components/logo.dart';
-import 'package:pickit_flutter/components/custom_form.dart';
+import 'package:pickit_flutter/screens/login/components/custom_form.dart';
 import 'package:pickit_flutter/size.dart';
 
 class LoginPage extends StatelessWidget {

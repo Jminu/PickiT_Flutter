@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -25,3 +26,4 @@ final List<IconMenu> iconMenu3 = [
   IconMenu(title: '비즈프로필 관리', iconData: FontAwesomeIcons.store),
   IconMenu(title: '지역광고', iconData: FontAwesomeIcons.bullhorn)
 ];
+*/
