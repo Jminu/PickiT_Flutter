@@ -23,6 +23,7 @@ void main() async {
   User user = User("minu", "1234");
   bool isLoggedIn = await am.loginUser(user.userId, user.userPwd); //로그인
 
+
   runApp(const MyApp());
 
   /**
@@ -46,10 +47,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: MainScreens(),
       theme: theme(),
-      /*initialRoute: "/login",
+      initialRoute: "/login",
       routes: {
         "/login": (context) => const LoginPage(),
-      },*/
+      },
     );
   }
 }

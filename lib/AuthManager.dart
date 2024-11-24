@@ -5,12 +5,13 @@ import './UserManager.dart';
 
 class AuthManager {
   //회원 등록
-  void registerUser(String userId, String userPwd) {
+  bool registerUser(String userId, String userPwd) {
     DatabaseReference ref = FirebaseDatabase.instance.ref("users/$userId");
     User user = User(userId, userPwd);
 
     ref.set({"userId": user.userId, "userPwd": user.userPwd});
     print("회원가입 성공!");
+    return true;
   }
 
   //로그인
