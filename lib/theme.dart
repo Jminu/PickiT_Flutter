@@ -8,7 +8,8 @@ TextTheme textTheme() {
         fontSize: 16.0, color: Colors.black, fontWeight: FontWeight.bold),
     bodyLarge: GoogleFonts.openSans(fontSize: 16.0, color: Colors.black),
     bodyMedium: GoogleFonts.openSans(fontSize: 14.0, color: Colors.grey),
-    titleMedium: GoogleFonts.openSans(fontSize: 15.0, color: Colors.black),
+    titleMedium: GoogleFonts.openSans(fontSize: 16.0, color: Colors.black),
+    titleLarge: GoogleFonts.openSans(fontSize: 22.0, color: Colors.black),
   );
 }
 
