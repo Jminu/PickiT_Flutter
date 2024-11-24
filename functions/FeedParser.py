@@ -6,7 +6,10 @@ RSS_FEED = [
     "https://www.chosun.com/arc/outboundfeeds/rss/?outputType=xml",  # 조선
     "https://rss.donga.com/total.xml",  # 동아
     "https://www.mk.co.kr/rss/40300001/",  # 매일경제
-    "https://www.hankyung.com/feed/all-news"  # 한국경제
+    "https://www.hankyung.com/feed/all-news",  # 한국경제
+    "https://www.yonhapnewstv.co.kr/browse/feed/", #연합뉴스
+    "https://www.khan.co.kr/rss/rssdata/total_news.xml", # 경향신문
+    "http://www.joongang.tv/rss/allArticle.xml" #중앙일보
 ]
 
 
@@ -16,6 +19,7 @@ def fetchRSSfeed() -> list:
     for feedUrl in RSS_FEED:
         try:
             feed = feedparser.parse(feedUrl)  # 피드 데이터를 파싱
+            print(f"{feedUrl}에서 기사를 가져옵니다.")
             for entry in feed.entries:  # 각 항목에 대한 처리
                 article = {
                     "title": entry.title,  # 파싱한 기사 타이틀
