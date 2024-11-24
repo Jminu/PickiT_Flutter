@@ -7,9 +7,9 @@ RSS_FEED = [
     "https://rss.donga.com/total.xml",  # 동아
     "https://www.mk.co.kr/rss/40300001/",  # 매일경제
     "https://www.hankyung.com/feed/all-news",  # 한국경제
-    "https://www.yonhapnewstv.co.kr/browse/feed/", #연합뉴스
-    "https://www.khan.co.kr/rss/rssdata/total_news.xml", # 경향신문
-    "http://www.joongang.tv/rss/allArticle.xml" #중앙일보
+    "https://www.yonhapnewstv.co.kr/browse/feed/",  # 연합뉴스
+    "https://www.khan.co.kr/rss/rssdata/total_news.xml",  # 경향신문
+    "http://www.joongang.tv/rss/allArticle.xml"  # 중앙일보
 ]
 
 
