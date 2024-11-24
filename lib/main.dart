@@ -13,8 +13,7 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
-import './News.dart';
-import 'package:pickit_flutter/pages/login_page.dart';
+import 'package:pickit_flutter/screens/login/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,13 +42,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // 1. 테마 설정
       debugShowCheckedModeBanner: false,
-      home: MainScreens(),
       theme: theme(),
       initialRoute: "/login",
       routes: {
         "/login": (context) => const LoginPage(),
+        "/home": (context) => const MainScreens(),
       },
     );
   }
