@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pickit_flutter/global.dart';
 import '../../../UserManager.dart';
 import '../../../theme.dart';
 import '../../myaccount/my_scrapscreen.dart';
@@ -31,7 +32,7 @@ class MyAccountHeader extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            MyScrapScreen(user: User("minu", "1234")),
+                            MyScrapScreen(userId: loggedInUserId),
                       ),
                     );
                   },

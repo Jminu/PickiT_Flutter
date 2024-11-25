@@ -1,13 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../News.dart';
-import '../../UserManager.dart';
-import '../../components/news_detailscreen.dart';
 
+import '../../News.dart';
+import '../../components/news_detailscreen.dart';
+import '../../global.dart';
 
 class MyScrapScreen extends StatefulWidget {
-  final User user; // User 객체를 전달받음
-
-  const MyScrapScreen({Key? key, required this.user}) : super(key: key);
+  const MyScrapScreen({Key? key, String? userId}) : super(key: key);
 
   @override
   _MyScrapScreenState createState() => _MyScrapScreenState();
@@ -19,7 +18,15 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
   @override
   void initState() {
     super.initState();
-    _myNewsFuture = widget.user.getMyNews(); // User 객체의 getMyNews 호출
+
+    // 현재 로그인된 유저의 ID를 가져와서 해당 유저의 스크랩된 뉴스를 호출
+    String? loggedInUserId = getLoggedInUserId();
+    if (loggedInUserId != null) {
+      _myNewsFuture = getMyNews(loggedInUserId); // 로그인된 유저의 ID로 getMyNews 호출
+    } else {
+      // 로그인이 되어 있지 않으면 빈 리스트 반환
+      _myNewsFuture = Future.value([]);
+    }
   }
 
   @override
