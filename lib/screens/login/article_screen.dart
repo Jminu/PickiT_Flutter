@@ -36,7 +36,7 @@ class ArticleScreen extends StatelessWidget {
       floatingActionButton: ArticleFloatingButton(
         onBookmark: () {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("기사가 북마크되었습니다!")),
+            SnackBar(content: Text("기사가 스크랩되었습니다!")),
           );
         },
         onScrollToTop: () {
