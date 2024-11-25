@@ -22,11 +22,13 @@ import 'models/product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
 
-  AuthManager am = AuthManager();
-  User user = User("minu", "1234");
-  bool isLoggedIn = await am.loginUser(user.userId, user.userPwd); //로그인
+  try {
+    await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
+    print("Firebase 초기화 완료");
+  } catch (e) {
+    print("Firebase 초기화 실패");
+  }
 
   runApp(const MyApp());
 
