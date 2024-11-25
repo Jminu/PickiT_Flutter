@@ -56,7 +56,16 @@ class _CustomFormState extends State<CustomForm> {
             },
             child: Text("Login"),
           ),
+      SizedBox(height: mediumGap), // 간격 추가
+      // Register 버튼
+      TextButton(
+        onPressed: () {
+          Navigator.pushNamed(context, "/register"); // RegisterPage로 이동
+        },
+        child: Text("Register"),
+      )
         ],
+
       ),
     );
   }
