@@ -2,9 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 import openai
 import re
+from dotenv import load_dotenv
 import os
 
 # OpenAI API 키 설정
+
+# .env 파일 로드
+load_dotenv()
+
+# 환경 변수에서 API 키 읽기
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # 기사 내용 가져오기
 def getArticleContent(url):
