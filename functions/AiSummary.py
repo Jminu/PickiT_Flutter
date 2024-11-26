@@ -5,8 +5,6 @@ import re
 from dotenv import load_dotenv
 import os
 
-# OpenAI API 키 설정
-
 # .env 파일 로드
 load_dotenv()
 
@@ -19,7 +17,7 @@ def getArticleContent(url):
     response = requests.get(url, timeout=10)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
-        paragraphs = soup.find_all('p')
+        paragraphs = soup.find_all('article')
         content = " ".join([p.get_text() for p in paragraphs])
         return clean_text(content)
     else:
@@ -51,22 +49,22 @@ def summarize_with_chatgpt(article, max_tokens=500):
 
 
 # 실행
-if __name__ == "__main__":
-    # URL 예시 (요약하려는 기사 URL)
-    url = "https://n.news.naver.com/mnews/article/001/0015067378?rc=N&ntype=RANKING"
-
-    # 기사 내용 가져오기
-    article = getArticleContent(url)
-
-    if article:
-        print("원문 길이 (문자 수):", len(article))
-        print("\n=== 원문 ===\n", article)
-
-        # ChatGPT를 사용하여 요약
-        summary = summarize_with_chatgpt(article, max_tokens=500)
-        if summary:
-            print("\n=== 요약 ===\n", summary)
-        else:
-            print("요약 중 오류가 발생했습니다.")
-    else:
-        print("기사를 가져오지 못했습니다.")
+# if __name__ == "__main__":
+#     # URL 예시 (요약하려는 기사 URL)
+#     url = "https://n.news.naver.com/mnews/article/001/0015067378?rc=N&ntype=RANKING"
+#
+#     # 기사 내용 가져오기
+#     article = getArticleContent(url)
+#
+#     if article:
+#         print("원문 길이 (문자 수):", len(article))
+#         print("\n=== 원문 ===\n", article)
+#
+#         # ChatGPT를 사용하여 요약
+#         summary = summarize_with_chatgpt(article, max_tokens=500)
+#         if summary:
+#             print("\n=== 요약 ===\n", summary)
+#         else:
+#             print("요약 중 오류가 발생했습니다.")
+#     else:
+#         print("기사를 가져오지 못했습니다.")
