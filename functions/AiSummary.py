@@ -5,8 +5,6 @@ import re
 from dotenv import load_dotenv
 import os
 
-# OpenAI API 키 설정
-
 # .env 파일 로드
 load_dotenv()
 
@@ -19,7 +17,7 @@ def getArticleContent(url):
     response = requests.get(url, timeout=10)
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
-        paragraphs = soup.find_all('p')
+        paragraphs = soup.find_all('article')
         content = " ".join([p.get_text() for p in paragraphs])
         return clean_text(content)
     else:
