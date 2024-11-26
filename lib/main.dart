@@ -17,6 +17,7 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
+import './Controller/GetSummary.dart';
 
 import 'models/product.dart';
 

@@ -2,6 +2,6 @@ firebase_functions
 firebase-admin
 feedparser
 beautifulsoup4
-openai
+openai==0.28.0
 requests
 python-dotenv
