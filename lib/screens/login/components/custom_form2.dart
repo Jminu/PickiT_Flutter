@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pickit_flutter/size.dart';
 import 'package:pickit_flutter/AuthManager.dart';
 
-import '../screens/login/components/custom_text_form_field.dart';
+import 'custom_text_form_field.dart';
 
 class CustomForm2 extends StatefulWidget {
   const CustomForm2({Key? key}) : super(key: key);

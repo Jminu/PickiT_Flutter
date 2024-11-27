@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/article.dart';
 import '../../models/product.dart';
-import '../login/article_screen.dart';
+import '../../components/article_screen.dart';
 import 'components/product_item.dart';
 
 class HomeScreen extends StatelessWidget {
