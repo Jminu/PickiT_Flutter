@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:pickit_flutter/global.dart';
+import '../../../UserManager.dart';
 import '../../../theme.dart';
+import '../../myaccount/my_scrapscreen.dart';
 
 class MyAccountHeader extends StatelessWidget {
   @override
@@ -22,11 +24,31 @@ class MyAccountHeader extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildRoundTextButton("스크랩", FontAwesomeIcons.bookmark),
-                _buildRoundTextButton("내 댓글", FontAwesomeIcons.comment),
-                _buildRoundTextButton("최근 본 기사", FontAwesomeIcons.history),
+                _buildRoundTextButton(
+                  "스크랩",
+                  FontAwesomeIcons.bookmark,
+                      () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MyScrapScreen(userId: loggedInUserId),
+                      ),
+                    );
+                  },
+                ),
+                _buildRoundTextButton("내 댓글", FontAwesomeIcons.comment, () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("내 댓글 화면 준비 중")),
+                  );
+                }),
+                _buildRoundTextButton("최근 본 기사", FontAwesomeIcons.history, () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("최근 본 기사 화면 준비 중")),
+                  );
+                }),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -64,7 +86,7 @@ class MyAccountHeader extends StatelessWidget {
                   size: 15,
                 ),
               ),
-            )
+            ),
           ],
         ),
         SizedBox(width: 18),
@@ -102,20 +124,19 @@ class MyAccountHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildRoundTextButton(String title, IconData iconData) {
+  Widget _buildRoundTextButton(String title, IconData iconData, VoidCallback onTap) {
     return Column(
       children: [
         InkWell(
-          onTap: () {},
-          splashColor: Colors.orange.withAlpha(30), // 물결 효과 색상
-          highlightColor: Colors.orange.withAlpha(50), // 터치 시 강조 색상
-          borderRadius: BorderRadius.circular(30.0), // 테두리 둥글게 처리
+          onTap: onTap,
+          splashColor: Colors.orange.withAlpha(30),
+          highlightColor: Colors.orange.withAlpha(50),
+          borderRadius: BorderRadius.circular(30.0),
           child: Container(
             width: 60,
             height: 60,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
-              //color: Color.fromRGBO(255, 226, 208, 1),
               border: Border.all(color: Color(0xFFD4D5DD), width: 0.5),
             ),
             child: Icon(
@@ -128,7 +149,7 @@ class MyAccountHeader extends StatelessWidget {
         Text(
           title,
           style: textTheme().titleMedium,
-        )
+        ),
       ],
     );
   }

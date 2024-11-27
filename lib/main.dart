@@ -3,7 +3,11 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pickit_flutter/screens/home/home_screen.dart';
+import 'package:pickit_flutter/screens/login/login_screen.dart';
+import 'package:pickit_flutter/screens/login/register_screen.dart';
 import 'package:pickit_flutter/screens/main_screens.dart';
+import 'package:pickit_flutter/screens/myaccount/my_scrapscreen.dart';
 import 'package:pickit_flutter/theme.dart';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -13,15 +17,19 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
-import 'package:pickit_flutter/screens/login/login_screen.dart';
+import './Controller/GetSummary.dart';
+
+import 'models/product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
 
-  AuthManager am = AuthManager();
-  User user = User("minu", "1234");
-  bool isLoggedIn = await am.loginUser(user.userId, user.userPwd); //로그인
+  try {
+    await Firebase.initializeApp(); //initializeApp가 처리되는걸 대기
+    print("Firebase 초기화 완료");
+  } catch (e) {
+    print("Firebase 초기화 실패");
+  }
 
   runApp(const MyApp());
 
@@ -43,11 +51,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      initialRoute: "/login", // 초기 화면 경로 설정
       theme: theme(),
-      initialRoute: "/login",
       routes: {
         "/login": (context) => const LoginPage(),
-        "/home": (context) => const MainScreens(),
+        "/register": (context) => const RegisterPage(), // 회원가입 페이지
+        "/home": (context) => const MainScreens(), // MainScreens로 연결
       },
     );
   }
