@@ -5,8 +5,11 @@ import 'package:http/http.dart' as http;
 import '../News.dart';
 
 /*
-관련된 기사를 가져오고, 그 기사 리스트를 반환하는 함수
- */
+* 이 함수는 키워드와 관련된 뉴스정보를 전달받는다(title, link, published)
+* API요청하면 body에 userId를 실어서 보낸다.
+* 요청된 python에서는 전달받은 userId를 활용해 DB에서 userId에 저장된 키워드 리스트
+* 불러오고, 그 키워드 리스트들과 관련된 뉴스만 필터링해서 response한다.
+*  */
 Future<List<dynamic>> getFilteredFeeds() async {
   String? userId = getLoggedInUserId();
   final response = await http.post(
