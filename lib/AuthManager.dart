@@ -5,13 +5,20 @@ import './UserManager.dart';
 
 class AuthManager {
   //회원 등록
-  bool registerUser(String userId, String userPwd) {
+  Future<bool> registerUser(String userId, String userPwd) async {
     DatabaseReference ref = FirebaseDatabase.instance.ref("users/$userId");
-    User user = User(userId, userPwd);
+    final snapshot = await ref.get(); //userId경로에서 스냅샷 가져오고
 
-    ref.set({"userId": user.userId, "userPwd": user.userPwd});
-    print("회원가입 성공!");
-    return true;
+    if (snapshot.exists) {
+      //userId가 이미 존재한다면 (회원가입 안됨, 이미 존재하는 id)
+      print("이미 존재하는 ID입니다.");
+      return false;
+    } else {
+      User user = User(userId, userPwd);
+      ref.set({"userId": user.userId, "userPwd": user.userPwd});
+      print("회원가입 성공");
+      return true;
+    }
   }
 
   //로그인
