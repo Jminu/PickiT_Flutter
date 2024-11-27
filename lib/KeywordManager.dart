@@ -5,7 +5,7 @@ import './Keyword.dart';
 import './UserManager.dart';
 
 class KeywordManager {
-  String userId;
+  String? userId;
 
   //생성자
   KeywordManager(this.userId); //생성자에 userId넣어야함 getLoggedInUserId()전역함수 사용
