@@ -5,15 +5,15 @@ import './Keyword.dart';
 import './UserManager.dart';
 
 class KeywordManager {
-  final User user;
+  String userId;
 
   //생성자
-  KeywordManager(this.user);
+  KeywordManager(this.userId); //생성자에 userId넣어야함 getLoggedInUserId()전역함수 사용
 
   //키워드 추가(json형식으로 저장)
   Future<void> addKeyword(Keyword keyWord) async {
     DatabaseReference ref = FirebaseDatabase.instance
-        .ref("users/${this.user.userId}/keywords")
+        .ref("users/${this.userId}/keywords")
         .push();
 
     Map<String, String> mapKeyword = {
@@ -29,7 +29,7 @@ class KeywordManager {
 
   Future<void> removeKeyword(Keyword keyWord) async {
     DatabaseReference ref =
-        FirebaseDatabase.instance.ref("users/${this.user.userId}/keywords");
+        FirebaseDatabase.instance.ref("users/${this.userId}/keywords");
 
     final snapshot = await ref.get();
     if (snapshot.exists) {
@@ -54,7 +54,7 @@ class KeywordManager {
   //키워드 활성화
   Future<void> activateKeyword(Keyword keyWord) async {
     DatabaseReference ref =
-        FirebaseDatabase.instance.ref("users/${this.user.userId}/keywords");
+        FirebaseDatabase.instance.ref("users/${this.userId}/keywords");
 
     final snapshot = await ref.get();
 
@@ -78,7 +78,7 @@ class KeywordManager {
   //키워드 비활성화
   Future<void> deactivateKeyword(Keyword keyWord) async {
     DatabaseReference ref =
-        FirebaseDatabase.instance.ref("users/${this.user.userId}/keywords");
+        FirebaseDatabase.instance.ref("users/${this.userId}/keywords");
 
     final snapshot = await ref.get();
     if (snapshot.exists) {
