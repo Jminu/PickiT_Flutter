@@ -5,11 +5,43 @@ import '../models/keyword.dart';
 import './UserManager.dart';
 
 class KeywordManager {
-  String userId;
+  String? userId;
 
   //생성자
   KeywordManager(
       {required this.userId}); //생성자에 userId넣어야함 getLoggedInUserId()전역함수 사용
+
+  //특정유저의 키워드를 List형태로
+  Future<List<Keyword>> getMyKeywords() async {
+    List<Keyword> myKeywords = [];
+
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/${this.userId}/keywords"); //
+
+    final snapshot = await ref.get();
+
+    if (snapshot.exists) {
+      //snapshot 존재하면
+      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic, dynamic>;
+
+      data.forEach((key, value) {
+        //Map을 돌면서
+        bool isActivated;
+        if (value["isActivated"].toLowerCase() == "true") {
+          isActivated = true;
+        } else {
+          isActivated = false;
+        }
+        Keyword keyword = Keyword(value["keyWord"], isActivated); //키워드 객체를 생성
+        myKeywords.add(keyword); //List에 넣음
+      });
+
+      return myKeywords;
+    } else {
+      //존재 안하면 빈배열 반환
+      return [];
+    }
+  }
 
   //키워드 추가(json형식으로 저장)
   Future<void> addKeyword(Keyword keyWord) async {
