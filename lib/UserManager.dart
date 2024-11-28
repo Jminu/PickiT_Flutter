@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 
-import './Keyword.dart';
+import 'models/Keyword.dart';
 import './News.dart';
 
 class User {

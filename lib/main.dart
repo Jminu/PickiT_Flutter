@@ -14,7 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import './AuthManager.dart';
 import './KeywordManager.dart';
 import './UserManager.dart';
-import './Keyword.dart';
+import 'models/Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
 import './Controller/GetSummary.dart';
@@ -32,6 +32,7 @@ void main() async {
     print("Firebase 초기화 실패");
   }
 
+  //showDB();
   runApp(const MyApp());
 
   /**
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: "/login", // 초기 화면 경로 설정
       theme: theme(),
+
       routes: {
         "/login": (context) => const LoginPage(),
         "/register": (context) => const RegisterPage(), // 회원가입 페이지

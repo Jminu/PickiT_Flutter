@@ -1,45 +1,45 @@
 import 'package:flutter/material.dart';
-import '../../models/keyword_data.dart';
+import '../../models/Keyword.dart';
 import 'package:pickit_flutter/theme.dart';
+import '../../keywordmanager.dart';
+import '../../global.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-// 키워드 추천&등록 페이지
 class KeywordRegisterScreen extends StatefulWidget {
-  final Function(KeywordData) onKeywordAdded;
-
-  KeywordRegisterScreen({required this.onKeywordAdded});
-
   @override
   _KeywordRegisterScreenState createState() => _KeywordRegisterScreenState();
 }
 
 class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
   final TextEditingController _controller = TextEditingController();
+  String? userId; // userId 변수 추가
 
-  void _registerKeyword() {
-    String input = _controller.text.trim();
+  @override
+  void initState() {
+    super.initState();
+    userId = getLoggedInUserId(); // 로그인된 userId 가져오기
+  }
 
-    if (input.isNotEmpty) {
-      // 새로운 키워드 추가
-      KeywordData newKeyword = KeywordData(title: input, url: null);
-      widget.onKeywordAdded(newKeyword);
-
-      // 입력 필드 비우기
-      _controller.clear();
-
-      // 스낵바 표시
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Center(child: Text('키워드 등록되었습니다.')),
-          behavior: SnackBarBehavior.floating,
-          margin: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          backgroundColor: Colors.black87,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-      );
+  // Firebase에 키워드 등록
+  Future<void> _registerKeyword(String keyword) async {
+    if (userId == null) {
+      print("User is not logged in.");
+      return;
     }
+
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/$userId/keywords");
+
+    // 데이터베이스에 새로운 키워드 추가
+    await ref.push().set({
+      'keyWord': keyword,
+      'isActivated': 'true',
+    });
+
+    // 등록 완료 후 Snackbar 표시
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('$keyword 키워드가 등록되었습니다.')),
+    );
   }
 
   @override
@@ -47,7 +47,7 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('키워드 추천&등록'),
-        centerTitle: true, // 제목을 가운데 정렬
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -64,19 +64,23 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 10), // 텍스트 필드와 버튼 사이의 간격
-                OutlinedButton(
-                  onPressed: _registerKeyword,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.zero, // 모서리 둥근 정도를 0으로 설정하여 네모나게 만듦
-                    ),
-                    padding: EdgeInsets.symmetric(
-                        vertical: 18.0, horizontal: 16.0), // 세로 크기 키우기
+                SizedBox(width: 8),
+                MaterialButton(
+                  onPressed: () {
+                    final keyword = _controller.text.trim();
+                    if (keyword.isNotEmpty) {
+                      _registerKeyword(keyword);
+                    }
+                  },
+                  child: Text(
+                    '등록',
+                    style: TextStyle(fontSize: 18), // 글자 크기 설정
                   ),
-                  child: Text('등록'),
-                )
+                  color: Colors.grey[700], // 배경색 설정
+                  textColor: Colors.white, // 텍스트 색상 설정
+                  height: 52, // 세로 크기
+                  minWidth: 5, // 가로 크기
+                ),
               ],
             ),
           ),
@@ -86,30 +90,34 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(height: 15),
+          // 트렌드 키워드 리스트
           Expanded(
             child: ListView.builder(
-              itemCount: exampleKeywords.length,
+              itemCount: recommendKeywords.length, // recommendKeywords 리스트 사용
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(exampleKeywords[index].title),
-                  trailing: ElevatedButton(
-                    onPressed: () {
-                      widget.onKeywordAdded(exampleKeywords[index]);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Center(
-                            child: Text('키워드 추가 완료!!'),
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 120, vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text('등록'),
+                final keyword = recommendKeywords[index];
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 58),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      keyword.keyWord,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    trailing: MaterialButton(
+                      onPressed: () {
+                        _registerKeyword(keyword.keyWord); // 버튼 클릭 시 키워드 등록
+                      },
+                      color: Colors.grey[400],
+                      textColor: Colors.white,
+                      minWidth: 50,
+                      child: Text(
+                        '등록',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
                   ),
                 );
               },

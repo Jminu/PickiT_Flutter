@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SwipeToDelete extends StatelessWidget {
-  final Widget child; // 삭제될 UI
-  final VoidCallback onDelete; // 삭제 동작
+  final Widget child;
+  final VoidCallback onDelete;
 
   const SwipeToDelete({required this.child, required this.onDelete, Key? key})
       : super(key: key);

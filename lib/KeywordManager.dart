@@ -1,20 +1,20 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 import './global.dart';
-import './Keyword.dart';
+import '../models/keyword.dart';
 import './UserManager.dart';
 
 class KeywordManager {
   String userId;
 
   //생성자
-  KeywordManager(this.userId); //생성자에 userId넣어야함 getLoggedInUserId()전역함수 사용
+  KeywordManager(
+      {required this.userId}); //생성자에 userId넣어야함 getLoggedInUserId()전역함수 사용
 
   //키워드 추가(json형식으로 저장)
   Future<void> addKeyword(Keyword keyWord) async {
-    DatabaseReference ref = FirebaseDatabase.instance
-        .ref("users/${this.userId}/keywords")
-        .push();
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/${this.userId}/keywords").push();
 
     Map<String, String> mapKeyword = {
       //Map형태로 변환해야함(객체를)

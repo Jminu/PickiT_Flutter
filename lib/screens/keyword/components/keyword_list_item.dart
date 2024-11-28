@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../models/keyword_data.dart';
+import '../../../models/keyword.dart';
 
 class KeywordListItem extends StatelessWidget {
-  final KeywordData keyword;
+  final Keyword keyword;
   final VoidCallback onTap;
 
   const KeywordListItem({required this.keyword, required this.onTap, Key? key})
@@ -25,12 +25,12 @@ class KeywordListItem extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
         title: Text(
-          keyword.title,
+          keyword.keyWord,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         trailing: Icon(
-          Icons.arrow_back_ios,
+          keyword.isActivated ? Icons.check : Icons.add,
           color: Theme.of(context).iconTheme.color,
           size: 16.0,
         ),
