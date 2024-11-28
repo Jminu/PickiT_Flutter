@@ -37,16 +37,6 @@ class MyAccountHeader extends StatelessWidget {
                     );
                   },
                 ),
-                _buildRoundTextButton("내 댓글", FontAwesomeIcons.comment, () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("내 댓글 화면 준비 중")),
-                  );
-                }),
-                _buildRoundTextButton("최근 본 기사", FontAwesomeIcons.history, () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("최근 본 기사 화면 준비 중")),
-                  );
-                }),
               ],
             ),
           ],
