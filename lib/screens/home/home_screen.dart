@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../../News.dart';
 import '../../components/news_service.dart';
-import '../../models/product.dart';
 import '../../models/article.dart';
 import '../Article/article_screen.dart';
 
@@ -14,12 +13,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<Product>> _newsFuture;
+  late Future<List<News>> _newsFuture;
 
   @override
   void initState() {
     super.initState();
-    _newsFuture = NewsService().fetchNews(); // Firebase에서 뉴스 데이터를 가져옴
+    _newsFuture = NewsService().getFilteredFeeds(); // 서버에서 필터링된 뉴스 데이터 가져오기
   }
 
   @override
@@ -62,28 +61,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: FutureBuilder<List<Product>>(
+      body: FutureBuilder<List<News>>(
         future: _newsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(
-                child: Text("오류 발생: ${snapshot.error}"));
+            return Center(child: Text("오류 발생: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text("뉴스 데이터가 없습니다."));
           } else {
             final newsList = snapshot.data!;
-            return ListView.separated(
-              separatorBuilder: (context, index) => const Divider(
-                height: 0,
-                indent: 16,
-                endIndent: 16,
-                color: Colors.grey,
-              ),
+            return ListView.builder(
               itemCount: newsList.length,
               itemBuilder: (context, index) {
-                final product = newsList[index];
+                final news = newsList[index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -91,9 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(
                         builder: (context) => ArticleScreen(
                           article: Article(
-                            title: product.title,
-                            date: product.publishedAt,
-                            imageUrl: product.urlToImage,
+                            title: news.title,
+                            date: news.published,
+                            imageUrl: "", // 이미지 정보가 없으므로 비워둠
                             content: "기사 본문 내용을 여기에 추가하세요.",
                           ),
                         ),
@@ -101,15 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   },
                   child: ListTile(
-                    leading: Image.network(
-                      product.urlToImage,
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                    title: Text(product.title),
-                    subtitle: Text("${product.publishedAt} | ${product.address}"),
-                    trailing: Text("${product.price}원"),
+                    title: Text(news.title),
+                    subtitle: Text(news.published),
+                    trailing: const Icon(Icons.arrow_forward),
                   ),
                 );
               },
