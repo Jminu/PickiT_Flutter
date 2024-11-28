@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'article_header.dart';
-import '../models/article.dart';
-import 'article_content.dart';
-import 'article_floating_button.dart';
+import '../../models/article.dart';
+import 'components/article_content.dart';
+import 'components/article_floating_button.dart';
+import 'components/article_header.dart';
 
 class ArticleScreen extends StatelessWidget {
   final Article article;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/article.dart';
 import '../../../models/product.dart';
-import '../../../components/article_screen.dart';
+import '../../Article/article_screen.dart';
 
 class ProductItem extends StatelessWidget {
   final Product product;
