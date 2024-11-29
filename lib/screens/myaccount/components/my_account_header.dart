@@ -32,7 +32,7 @@ class MyAccountHeader extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            MyScrapScreen(userId: loggedInUserId),
+                            MyScrapScreen(userId: Global.loggedInUserId),
                       ),
                     );
                   },

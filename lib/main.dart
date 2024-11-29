@@ -33,7 +33,6 @@ void main() async {
     print("Firebase 초기화 실패");
   }
 
-
   //runApp(const MyApp());
 
   /**

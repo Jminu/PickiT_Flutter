@@ -20,7 +20,7 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
     super.initState();
 
     // 현재 로그인된 유저의 ID를 가져와서 해당 유저의 스크랩된 뉴스를 호출
-    String? loggedInUserId = getLoggedInUserId();
+    String? loggedInUserId = Global.getLoggedInUserId();
     if (loggedInUserId != null) {
       _myNewsFuture = getMyNews(loggedInUserId); // 로그인된 유저의 ID로 getMyNews 호출
     } else {

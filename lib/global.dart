@@ -2,25 +2,26 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
 import './News.dart';
 
-String? loggedInUserId;
+class Global {
+  static String? loggedInUserId;
 
-void setLoggedInUserId(String userId) {
-  loggedInUserId = userId;
-}
+  static void setLoggedInUserId(String userId) {
+    loggedInUserId = userId;
+  }
 
-void clearLoggedUserIn() {
-  loggedInUserId = null;
-}
+  static void clearLoggedUserIn() {
+    loggedInUserId = null;
+  }
 
-String? getLoggedInUserId() {
-  return loggedInUserId;
+  static String? getLoggedInUserId() {
+    return loggedInUserId;
+  }
 }
 
 //뉴스 스크랩 함수(유저의 DB에 저장)
 Future<void> addMyNews(String userId, News news) async {
-  DatabaseReference ref = FirebaseDatabase.instance
-      .ref("users/$userId/myNews")
-      .push();
+  DatabaseReference ref =
+      FirebaseDatabase.instance.ref("users/$userId/myNews").push();
 
   //뉴스를 Map형식으로 변환
   Map<String, String> mapMyNews = {
@@ -38,8 +39,7 @@ Future<void> addMyNews(String userId, News news) async {
 Future<List<News>> getMyNews(String userId) async {
   List<News> myNews = []; //스크랩한 뉴스들을 저장
 
-  DatabaseReference ref =
-      FirebaseDatabase.instance.ref("users/$userId/myNews");
+  DatabaseReference ref = FirebaseDatabase.instance.ref("users/$userId/myNews");
   final snapshot = await ref.get(); //DB에서 스크랩 뉴스 snapshot으로 가져옴
 
   if (snapshot.exists) {
