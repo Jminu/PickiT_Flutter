@@ -34,7 +34,7 @@ class AuthManager {
       if (data != null && data is Map<dynamic, dynamic>) {
         //아이디 비밀번호, DB에 있는 것과 맞는지 확인
         if (data["userId"] == userId && data["userPwd"] == userPwd) {
-          setLoggedInUserId(userId);
+          Global.setLoggedInUserId(userId);
           print("로그인 성공");
           return true;
         } else {
