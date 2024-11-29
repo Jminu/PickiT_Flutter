@@ -1,6 +1,6 @@
 class Keyword {
   String keyWord;
-  bool isActivated = false;
+  bool isActivated = true;
 
   Keyword(this.keyWord, this.isActivated);
 
