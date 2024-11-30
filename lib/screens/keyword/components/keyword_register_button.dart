@@ -1,31 +1,73 @@
 import 'package:flutter/material.dart';
-import '../../../models/keyword_data.dart';
-import '../keyword_register_screen.dart';
+import 'package:pickit_flutter/Keyword.dart';
+import 'package:pickit_flutter/KeywordManager.dart';
 
-// 키워드 버튼 관련
 class KeywordRegisterButton extends StatelessWidget {
-  final Function(KeywordData) onKeywordAdded;
+  final Function(Keyword) onKeywordAdded;
+  final KeywordManager keywordManager;
 
-  const KeywordRegisterButton({required this.onKeywordAdded, Key? key})
-      : super(key: key);
+  const KeywordRegisterButton({
+    required this.onKeywordAdded,
+    required this.keywordManager,
+    Key? key,
+  }) : super(key: key);
+
+  void _showKeywordDialog(BuildContext context) {
+    TextEditingController _controller = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("키워드 추가"),
+          content: TextField(
+            controller: _controller,
+            decoration: const InputDecoration(
+              hintText: "키워드를 입력하세요",
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("취소"),
+            ),
+            TextButton(
+              onPressed: () async {
+                String keywordText = _controller.text.trim();
+                if (keywordText.isNotEmpty) {
+                  Keyword newKeyword = Keyword(keywordText, true);
+
+                  // Add keyword only if it is not a duplicate
+                  await keywordManager.addKeyword(newKeyword);
+
+                  // Notify the parent widget about the new keyword (only if it was added)
+                  onKeywordAdded(newKeyword);
+
+                  // Close the dialog
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("추가"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                KeywordRegisterScreen(onKeywordAdded: onKeywordAdded),
-          ),
-        );
+        _showKeywordDialog(context);
       },
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(
-            vertical: 14.0, horizontal: 30.0), // 상하, 좌우 패딩을 늘려서 크기 증가
+        padding: const EdgeInsets.symmetric(
+            vertical: 14.0, horizontal: 30.0), // Increase button size
       ),
-      child: const Text('키워드 추천&등록'),
+      child: const Text('키워드 추가'),
     );
   }
 }

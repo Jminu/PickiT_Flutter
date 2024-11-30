@@ -44,6 +44,15 @@ class KeywordManager {
 
   //키워드 추가(json형식으로 저장)
   Future<void> addKeyword(Keyword keyWord) async {
+    // 키워드가 중복으로 등록되는 경우가 있어서 추가
+    bool exists = await _checkIfKeywordExists(keyWord.keyWord);
+
+    if (exists) {
+      print("이미 등록된 키워드입니다.");
+      return; // 키워드가 이미 존재하면 추가하지 않음
+    }
+
+    // 새로운 키워드를 추가
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("users/${this.userId}/keywords").push();
 
@@ -56,6 +65,19 @@ class KeywordManager {
     await ref.set(mapKeyword);
 
     print("키워드 추가 완료!");
+  }
+
+  //키워드 존재 여부 확인
+  Future<bool> _checkIfKeywordExists(String keywordText) async {
+    List<Keyword> myKeywords = await getMyKeywords();
+
+    // 현재 키워드 목록에서 중복된 키워드가 있는지 확인
+    for (var keyword in myKeywords) {
+      if (keyword.keyWord == keywordText) {
+        return true; // 중복된 키워드가 있으면 true 반환
+      }
+    }
+    return false; // 중복된 키워드가 없으면 false 반환
   }
 
   Future<void> removeKeyword(Keyword keyWord) async {
