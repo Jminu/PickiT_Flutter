@@ -18,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _newsFuture = NewsService().getFilteredFeeds(); // 서버에서 필터링된 뉴스 데이터 가져오기
+    // 서버에서 필터링된 뉴스 데이터 가져오기
+    _newsFuture = NewsService().getFilteredFeeds();
   }
 
   @override
@@ -67,15 +68,25 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
+            // 에러 메시지 출력
             return Center(child: Text("오류 발생: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // 데이터가 없을 때 디버깅 출력 추가
+            print("받은 데이터가 없습니다: ${snapshot.data}");
             return const Center(child: Text("뉴스 데이터가 없습니다."));
           } else {
+            // 받은 데이터 디버깅용 출력
+            print("받은 데이터: ${snapshot.data}");
             final newsList = snapshot.data!;
             return ListView.builder(
               itemCount: newsList.length,
               itemBuilder: (context, index) {
                 final news = newsList[index];
+
+                // 뉴스 데이터 디버깅
+                print(
+                    "뉴스 제목: ${news.title}, 링크: ${news.link}, 발행일: ${news.published}");
+
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -85,14 +96,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           article: Article(
                             title: news.title,
                             date: news.published,
-                            imageUrl: "", // 이미지 정보가 없으므로 비워둠
-                            content: "기사 본문 내용을 여기에 추가하세요.",
+                            imageUrl: news.imageUrl ??
+                                "https://via.placeholder.com/150", // 이미지 기본값 설정
+                            content:
+                            "기사 본문 내용을 여기에 추가하세요. 링크: ${news.link}",
                           ),
                         ),
                       ),
                     );
                   },
                   child: ListTile(
+                    leading: news.imageUrl != null && news.imageUrl!.isNotEmpty
+                        ? Image.network(
+                      news.imageUrl!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    )
+                        : const Icon(Icons.image_not_supported),
                     title: Text(news.title),
                     subtitle: Text(news.published),
                     trailing: const Icon(Icons.arrow_forward),

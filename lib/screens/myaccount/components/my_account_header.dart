@@ -1,10 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:pickit_flutter/global.dart';
-import '../../../UserManager.dart';
 import '../../../theme.dart';
-import '../../myaccount/my_scrapscreen.dart';
 
 class MyAccountHeader extends StatelessWidget {
   @override
@@ -20,25 +15,6 @@ class MyAccountHeader extends StatelessWidget {
             _buildProfileRow(),
             const SizedBox(height: 30),
             _buildProfileButton(),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildRoundTextButton(
-                  "스크랩",
-                  FontAwesomeIcons.bookmark,
-                      () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MyScrapScreen(userId: loggedInUserId),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
           ],
         ),
       ),
@@ -79,15 +55,15 @@ class MyAccountHeader extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(width: 18),
+        const SizedBox(width: 18),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text("최최최명헌", style: textTheme().displayMedium),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text("나는 나입니다."),
           ],
-        )
+        ),
       ],
     );
   }
@@ -98,7 +74,7 @@ class MyAccountHeader extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Color(0xFFD4D5DD),
+            color: const Color(0xFFD4D5DD),
             width: 1.0,
           ),
           borderRadius: BorderRadius.circular(6.0),
@@ -111,36 +87,6 @@ class MyAccountHeader extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildRoundTextButton(String title, IconData iconData, VoidCallback onTap) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: onTap,
-          splashColor: Colors.orange.withAlpha(30),
-          highlightColor: Colors.orange.withAlpha(50),
-          borderRadius: BorderRadius.circular(30.0),
-          child: Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              border: Border.all(color: Color(0xFFD4D5DD), width: 0.5),
-            ),
-            child: Icon(
-              iconData,
-              color: Colors.orange,
-            ),
-          ),
-        ),
-        SizedBox(height: 10),
-        Text(
-          title,
-          style: textTheme().titleMedium,
-        ),
-      ],
     );
   }
 }

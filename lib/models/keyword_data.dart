@@ -16,4 +16,5 @@ List<KeywordData> exampleKeywords = [
   KeywordData(title: "Python", url: "https://python.org"),
   KeywordData(title: "Java", url: "https://java.com"),
   KeywordData(title: "Kotlin", url: "https://kotlinlang.org"),
+  KeywordData(title: "동덕", url: "https://www.ytn.co.kr/_ln/0103_202411291130191455"),
 ];
