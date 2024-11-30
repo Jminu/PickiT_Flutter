@@ -16,7 +16,7 @@ class NewsService {
 
   /// **서버에서 유저 키워드 기반 필터링된 뉴스 가져오기**
   Future<List<News>> getFilteredFeeds() async {
-    String? userId = getLoggedInUserId(); // 현재 로그인된 유저 ID 가져오기
+    String? userId = Global.getLoggedInUserId(); // 현재 로그인된 유저 ID 가져오기
     if (userId == null) {
       throw Exception("유저 ID를 가져올 수 없습니다. 로그인하세요.");
     }
@@ -99,5 +99,44 @@ class NewsService {
     };
 
     await ref.set(mapMyNews);
+    print("스크랩 뉴스 추가 완료");
+  }
+
+  /// **Firebase에서 특정 사용자의 스크랩 뉴스 삭제**
+  Future<void> removeMyNews(String userId, String newsTitle) async {
+    DatabaseReference ref = _getUserNewsRef(userId);
+    final snapshot = await ref.get();
+
+    if (snapshot.exists) {
+      for (var child in snapshot.children) {
+        if (child.child("title").value == newsTitle) {
+          await child.ref.remove();
+          print("스크랩 뉴스 삭제 완료: $newsTitle");
+          return;
+        }
+      }
+    }
+    print("삭제할 스크랩 뉴스를 찾을 수 없습니다.");
+  }
+
+  /// **스크랩 뉴스 업데이트 (예: 제목 수정 등)**
+  Future<void> updateMyNews(String userId, String oldTitle, News updatedNews) async {
+    DatabaseReference ref = _getUserNewsRef(userId);
+    final snapshot = await ref.get();
+
+    if (snapshot.exists) {
+      for (var child in snapshot.children) {
+        if (child.child("title").value == oldTitle) {
+          await child.ref.update({
+            "title": updatedNews.title,
+            "link": updatedNews.link,
+            "published": updatedNews.published,
+          });
+          print("스크랩 뉴스 업데이트 완료: ${updatedNews.title}");
+          return;
+        }
+      }
+    }
+    print("업데이트할 스크랩 뉴스를 찾을 수 없습니다.");
   }
 }

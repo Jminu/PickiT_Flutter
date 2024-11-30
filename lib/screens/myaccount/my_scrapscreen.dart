@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../News.dart';
 import '../../components/news_detailscreen.dart';
+import '../../components/news_service.dart';
 import '../../global.dart';
 
 class MyScrapScreen extends StatefulWidget {
-  const MyScrapScreen({Key? key, String? userId}) : super(key: key);
+  final String? userId; //userId를 필드로 추가
+
+  const MyScrapScreen({Key? key, this.userId}) : super(key: key);
 
   @override
   _MyScrapScreenState createState() => _MyScrapScreenState();
@@ -19,13 +22,12 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
   void initState() {
     super.initState();
 
-    // 현재 로그인된 유저의 ID를 가져와서 해당 유저의 스크랩된 뉴스를 호출
-    String? loggedInUserId = Global.getLoggedInUserId();
-    if (loggedInUserId != null) {
-      _myNewsFuture = getMyNews(loggedInUserId); // 로그인된 유저의 ID로 getMyNews 호출
+    // 위젯에서 전달된 userId를 사용
+    String? userId = widget.userId ?? Global.getLoggedInUserId(); // 전달된 userId 또는 글로벌 ID
+    if (userId != null) {
+      _myNewsFuture = NewsService().getMyNews(userId); // 유저 ID로 스크랩된 뉴스 호출
     } else {
-      // 로그인이 되어 있지 않으면 빈 리스트 반환
-      _myNewsFuture = Future.value([]);
+      _myNewsFuture = Future.value([]); // 유저 ID가 없으면 빈 리스트 반환
     }
   }
 
@@ -33,17 +35,28 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("스크랩한 뉴스"),
+        title: const Text("스크랩한 뉴스"),
+        centerTitle: true,
       ),
       body: FutureBuilder<List<News>>(
         future: _myNewsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("오류가 발생했습니다. 다시 시도해주세요."));
+            return Center(
+              child: Text(
+                "오류 발생: ${snapshot.error}",
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("스크랩된 뉴스가 없습니다."));
+            return const Center(
+              child: Text(
+                "스크랩된 뉴스가 없습니다.",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            );
           } else {
             final myNews = snapshot.data!;
             return ListView.builder(
@@ -53,8 +66,9 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
                 return ListTile(
                   title: Text(news.title),
                   subtitle: Text(news.published),
-                  trailing: Icon(Icons.arrow_forward),
+                  trailing: const Icon(CupertinoIcons.arrow_right),
                   onTap: () {
+                    // 뉴스 상세 화면으로 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(

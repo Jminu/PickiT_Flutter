@@ -25,7 +25,7 @@ class _MainScreensState extends State<MainScreens> {
         children: [
           HomeScreen(),         // 홈 화면
           KeywordScreen(),      // 키워드 화면
-          MyScrapScreen(userId: loggedInUserId), // 스크랩 화면
+          MyScrapScreen(userId: Global.loggedInUserId), // 스크랩 화면
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
