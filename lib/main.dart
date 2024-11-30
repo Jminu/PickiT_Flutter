@@ -33,7 +33,8 @@ void main() async {
     print("Firebase 초기화 실패");
   }
 
-  //runApp(const MyApp());
+  //showDB();
+  runApp(const MyApp());
 
   /**
    * 이 부분이 실행되면, 뉴스기사 긁어옵니다.
