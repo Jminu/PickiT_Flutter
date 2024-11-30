@@ -11,7 +11,7 @@ import '../News.dart';
 * 불러오고, 그 키워드 리스트들과 관련된 뉴스만 필터링해서 response한다.
 *  */
 Future<List<dynamic>> getFilteredFeeds() async {
-  String? userId = getLoggedInUserId();
+  String? userId = Global.getLoggedInUserId();
   final response = await http.post(
     Uri.parse("https://getfilterednewslist-z5lahfby6q-uc.a.run.app"),
     body: {
