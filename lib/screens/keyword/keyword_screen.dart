@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../models/keyword_data.dart';
-import 'components/keyword_register_button.dart';
-import 'components/keyword_list_item.dart';
+import 'package:pickit_flutter/KeywordManager.dart';
+import '../../Keyword.dart';
+import 'package:pickit_flutter/global.dart';
 import 'components/swipe_to_delete.dart';
+import 'components/keyword_register_button.dart';
 
 class KeywordScreen extends StatefulWidget {
   @override
@@ -10,18 +11,28 @@ class KeywordScreen extends StatefulWidget {
 }
 
 class _KeywordScreenState extends State<KeywordScreen> {
-  List<KeywordData> registeredKeywords = [];
+  String? userId;
+  late KeywordManager _keywordManager;
+  List<Keyword> activeKeywords = [];
 
-  void _addKeyword(KeywordData keyword) {
-    setState(() {
-      registeredKeywords.add(keyword);
-    });
+  @override
+  void initState() {
+    super.initState();
+    _initializeKeywords();
   }
 
-  void _removeKeyword(int index) {
-    setState(() {
-      registeredKeywords.removeAt(index);
-    });
+  //초기 로그인 될때 데이터 최신화
+  Future<void> _initializeKeywords() async {
+    userId = Global.getLoggedInUserId();
+    if (userId != null) {
+      _keywordManager = KeywordManager(userId!);
+
+      // Fetching keywords using KeywordManager
+      List<Keyword> keywords = await _keywordManager.getMyKeywords();
+      setState(() {
+        activeKeywords = keywords;
+      });
+    }
   }
 
   @override
@@ -34,45 +45,69 @@ class _KeywordScreenState extends State<KeywordScreen> {
       body: Column(
         children: [
           const SizedBox(height: 15),
-          KeywordRegisterButton(onKeywordAdded: _addKeyword),
+          KeywordRegisterButton(
+            onKeywordAdded: (Keyword newKeyword) {
+              //_keywordManager.addKeyword(newKeyword);
+              //즉각적으로 반영
+              setState(() {
+                activeKeywords.add(newKeyword);
+              });
+            },
+            keywordManager: _keywordManager,
+          ),
           const SizedBox(height: 20),
           Expanded(
-            child: ListView.builder(
-              itemCount: registeredKeywords.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 30.0,
-                  ),
-
-                  //여기에 키워드 관리 창에서 등록된 키워드 누르면 그 키워드 페이지 라우팅
-                  child: SwipeToDelete(
-                    onDelete: () => _removeKeyword(index),
-                    child: KeywordListItem(
-                      keyword: registeredKeywords[index],
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Scaffold(
-                              appBar: AppBar(
-                                title: Text(registeredKeywords[index].title),
-                              ),
-                              body: Center(
-                                child: Text(
-                                  'This is the detail page for ${registeredKeywords[index].title}.',
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+            child: activeKeywords.isEmpty
+                ? const Center(
+                    child: Text(
+                      "등록된 키워드가 없습니다.",
+                      style: TextStyle(fontSize: 16),
                     ),
+                  )
+                : ListView.builder(
+                    itemCount: activeKeywords.length,
+                    itemBuilder: (context, index) {
+                      final keyword = activeKeywords[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8.0,
+                          horizontal: 16.0,
+                        ),
+                        child: SwipeToDelete(
+                          onDelete: () async {
+                            await _keywordManager.removeKeyword(keyword);
+                            setState(() {
+                              activeKeywords.removeAt(index);
+                            });
+                          },
+                          child: ListTile(
+                            title: Text(
+                              keyword.keyWord,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            trailing: const Icon(Icons.chevron_left),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Scaffold(
+                                    appBar: AppBar(
+                                      title: Text(keyword.keyWord),
+                                    ),
+                                    body: Center(
+                                      child: Text(
+                                        'This is the detail page for ${keyword.keyWord}.',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
