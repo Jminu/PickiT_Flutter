@@ -17,6 +17,8 @@ import './UserManager.dart';
 import './Keyword.dart';
 import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
+import './Controller/GetSummary.dart';
+import './ShowDB.dart';
 
 import 'models/product.dart';
 
@@ -30,7 +32,10 @@ void main() async {
     print("Firebase 초기화 실패");
   }
 
+  showDB();
+
   runApp(const MyApp());
+
 
   /**
    * 이 부분이 실행되면, 뉴스기사 긁어옵니다.

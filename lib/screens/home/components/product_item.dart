@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/article.dart';
 import '../../../models/product.dart';
-import '../../login/article_screen.dart';
-
+import '../../Article/article_screen.dart';
 
 class ProductItem extends StatelessWidget {
   final Product product;
@@ -48,11 +47,16 @@ class ProductItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  Text(product.title,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4.0),
-                  Text('${product.address} • ${product.publishedAt}', style: TextStyle(color: Colors.grey)),
+                  Text('${product.address} • ${product.publishedAt}',
+                      style: TextStyle(color: Colors.grey)),
                   const SizedBox(height: 4.0),
-                  Text('${product.price}원', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                  Text('${product.price}원',
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pickit_flutter/components/logo.dart';
+import 'package:pickit_flutter/components/logo/logo.dart';
 import 'package:pickit_flutter/screens/login/components/custom_form.dart';
 import 'package:pickit_flutter/size.dart';
 
@@ -16,17 +16,11 @@ class LoginPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                SizedBox(height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.2),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                 Logo("Login"),
                 SizedBox(height: largeGap),
                 CustomForm(),
-                SizedBox(height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.1),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               ],
             ),
           ),

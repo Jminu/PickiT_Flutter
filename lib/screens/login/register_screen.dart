@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pickit_flutter/components/logo.dart';
-import 'package:pickit_flutter/components/custom_form2.dart';
+import 'package:pickit_flutter/components/logo/logo.dart';
+import 'package:pickit_flutter/screens/login/components/custom_form2.dart';
 import 'package:pickit_flutter/size.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -29,7 +29,8 @@ class RegisterPage extends StatelessWidget {
             // 커스텀 폼
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: CustomForm2(),// CustomForm2에서 Register 버튼으로 ProductPage로 이동
+              child:
+                  CustomForm2(), // CustomForm2에서 Register 버튼으로 ProductPage로 이동
             ),
             // 추가 여백
             SizedBox(height: largeGap),
