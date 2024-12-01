@@ -23,6 +23,7 @@ class ProductItem extends StatelessWidget {
                 date: product.publishedAt,
                 imageUrl: product.urlToImage,
                 content: "기사 본문 내용을 여기에 추가하세요.",
+                url: product.url, // 추가된 URL 필드 전달
               ),
             ),
           ),
@@ -49,7 +50,7 @@ class ProductItem extends StatelessWidget {
                 children: [
                   Text(product.title,
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4.0),
                   Text('${product.address} • ${product.publishedAt}',
                       style: TextStyle(color: Colors.grey)),

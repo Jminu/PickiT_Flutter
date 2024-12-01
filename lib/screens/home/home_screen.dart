@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../Controller/GetFilteredFeeds.dart';
 import '../../News.dart';
 import '../../components/news_service.dart';
 import '../../models/article.dart';
@@ -19,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     // 서버에서 필터링된 뉴스 데이터 가져오기
-    _newsFuture = NewsService().getFilteredFeeds();
+    _newsFuture = getFilteredFeeds();
   }
 
   @override
@@ -96,10 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           article: Article(
                             title: news.title,
                             date: news.published,
-                            imageUrl: news.imageUrl ??
-                                "https://via.placeholder.com/150", // 이미지 기본값 설정
-                            content:
-                            "기사 본문 내용을 여기에 추가하세요. 링크: ${news.link}",
+                            imageUrl: "", // 뉴스 객체에 이미지가 없는 경우
+                            content: "뉴스 본문 내용을 여기에 추가하세요.",
+                            url: news.link, // 뉴스의 링크를 사용
                           ),
                         ),
                       ),
@@ -126,4 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 }
+
