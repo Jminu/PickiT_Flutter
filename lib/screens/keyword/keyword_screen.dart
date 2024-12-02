@@ -22,11 +22,17 @@ class _KeywordScreenState extends State<KeywordScreen> {
   }
 
   //초기 로그인 될때 데이터 최신화
+  // 데이터 새로 고침 함수
+  Future<void> _refreshKeywords() async {
+    setState(() {
+      _initializeKeywords();  // 키워드를 다시 로드
+    });
+  }
+
   Future<void> _initializeKeywords() async {
     userId = Global.getLoggedInUserId();
     if (userId != null) {
       _keywordManager = KeywordManager(userId!);
-
       // Fetching keywords using KeywordManager
       List<Keyword> keywords = await _keywordManager.getMyKeywords();
       setState(() {
@@ -42,74 +48,58 @@ class _KeywordScreenState extends State<KeywordScreen> {
         title: const Text('키워드 관리'),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 15),
-          KeywordRegisterButton(
-            onKeywordAdded: (Keyword newKeyword) {
-              //_keywordManager.addKeyword(newKeyword);
-              //즉각적으로 반영
-              setState(() {
-                activeKeywords.add(newKeyword);
-              });
-            },
-            keywordManager: _keywordManager,
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: activeKeywords.isEmpty
-                ? const Center(
-                    child: Text(
-                      "등록된 키워드가 없습니다.",
-                      style: TextStyle(fontSize: 16),
+      body: RefreshIndicator(
+        onRefresh: _refreshKeywords,  // 새로 고침을 위한 함수 호출
+        child: Column(
+          children: [
+            const SizedBox(height: 15),
+            KeywordRegisterButton(
+              onKeywordAdded: (Keyword newKeyword) {
+                setState(() {
+                  activeKeywords.add(newKeyword);
+                });
+              },
+              keywordManager: _keywordManager,
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: activeKeywords.isEmpty
+                  ? const Center(
+                child: Text(
+                  "등록된 키워드가 없습니다.",
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+                  : ListView.builder(
+                itemCount: activeKeywords.length,
+                itemBuilder: (context, index) {
+                  final keyword = activeKeywords[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
                     ),
-                  )
-                : ListView.builder(
-                    itemCount: activeKeywords.length,
-                    itemBuilder: (context, index) {
-                      final keyword = activeKeywords[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 16.0,
+                    child: SwipeToDelete(
+                      onDelete: () async {
+                        await _keywordManager.removeKeyword(keyword);
+                        setState(() {
+                          activeKeywords.removeAt(index);
+                        });
+                      },
+                      child: ListTile(
+                        title: Text(
+                          keyword.keyWord,
+                          style: const TextStyle(fontSize: 18),
                         ),
-                        child: SwipeToDelete(
-                          onDelete: () async {
-                            await _keywordManager.removeKeyword(keyword);
-                            setState(() {
-                              activeKeywords.removeAt(index);
-                            });
-                          },
-                          child: ListTile(
-                            title: Text(
-                              keyword.keyWord,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            trailing: const Icon(Icons.chevron_left),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Scaffold(
-                                    appBar: AppBar(
-                                      title: Text(keyword.keyWord),
-                                    ),
-                                    body: Center(
-                                      child: Text(
-                                        'This is the detail page for ${keyword.keyWord}.',
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-          ),
-        ],
+                        trailing: const Icon(Icons.chevron_left),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
