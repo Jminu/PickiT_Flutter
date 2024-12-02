@@ -29,7 +29,7 @@ Future<List<News>> getFilteredFeeds() async {
 
     for (var feed in filteredFeeds) {
       News news = News(
-          title: feed["title"],
+        title: feed["title"],
         link: feed["link"],
         published: feed["published"],
         imageUrl: feed["imageUrl"]
