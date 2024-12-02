@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../Controller/GetSummary.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart'; // WebView import
 import '../../News.dart';
 import '../../models/article.dart';
-import '../../components/news_service.dart'; // getSummary 함수 사용
+import '../../Controller/GetSummary.dart'; // 요약 함수
 import '../../global.dart';
-import 'components/article_content.dart';
-import 'components/article_floating_button.dart';
-import 'components/article_header.dart';
 
 class ArticleScreen extends StatelessWidget {
   final Article article;
@@ -21,43 +19,58 @@ class ArticleScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ArticleHeader(article: article), // 헤더 컴포넌트
-              const SizedBox(height: 16),
-              ArticleContent(content: article.content), // 본문 컴포넌트
-              const SizedBox(height: 300),
-            ],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.open_in_browser),
+            onPressed: () async {
+              final url = article.url; // 기사 원문 URL
+              if (await canLaunchUrl(Uri.parse(url))) {
+                await launchUrl(Uri.parse(url));
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("URL을 열 수 없습니다.")),
+                );
+              }
+            },
           ),
+        ],
+      ),
+      body: WebView(
+        initialUrl: article.url, // 기사 원문 URL을 로드
+        javascriptMode: JavascriptMode.unrestricted, // JavaScript 허용
+      ),
+      floatingActionButton: _buildFloatingActionButtons(context),
+    );
+  }
+
+  // Floating Action Buttons 생성
+  Widget _buildFloatingActionButtons(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        FloatingActionButton(
+          heroTag: 'bookmark',
+          onPressed: () async {
+            String? userId = Global.getLoggedInUserId();
+            if (userId != null) {
+              await _scrapArticle(context, userId, article);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("로그인이 필요합니다.")),
+              );
+            }
+          },
+          child: const Icon(Icons.bookmark),
         ),
-      ),
-      floatingActionButton: ArticleFloatingButton(
-        onBookmark: () async {
-          String? userId = Global.getLoggedInUserId();
-          if (userId != null) {
-            await _scrapArticle(context, userId, article); // 스크랩 로직
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("로그인이 필요합니다.")),
-            );
-          }
-        },
-        onScrollToTop: () {
-          Scrollable.ensureVisible(
-            context,
-            alignment: 0.0,
-            duration: const Duration(milliseconds: 300),
-          );
-        },
-        onSummarize: () async {
-          await _showSummaryPopup(context, article.url); // 요약 기능 추가
-        },
-      ),
+        const SizedBox(height: 16),
+        FloatingActionButton(
+          heroTag: 'summarize',
+          onPressed: () async {
+            await _showSummaryPopup(context, article.url);
+          },
+          child: const Icon(Icons.remove_red_eye), // 요약 아이콘
+        ),
+      ],
     );
   }
 
@@ -81,7 +94,7 @@ class ArticleScreen extends StatelessWidget {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("본문 요약"),
+          title: const Text("기사 요약"),
           content: Text(
             summary.isNotEmpty ? summary : "요약 내용을 가져올 수 없습니다.",
             style: const TextStyle(fontSize: 16),
@@ -113,7 +126,7 @@ class ArticleScreen extends StatelessWidget {
           article.title,
           article.url,
           article.date,
-          article.imageUrl, // 이미지 URL 추가
+          article.imageUrl,
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(
