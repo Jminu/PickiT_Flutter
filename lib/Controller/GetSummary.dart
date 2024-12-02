@@ -7,21 +7,17 @@ import 'package:http/http.dart' as http;
 * 요약본을 response로 제공해준다.
 * */
 Future<String> getSummary(String newsLink) async {
-  String? link = newsLink;
-
   final response = await http.post(
     Uri.parse("https://getsummary-z5lahfby6q-uc.a.run.app"),
-    body: {
-      'link': link,
-    },
+    body: {'link': newsLink},  // 'link'가 URL 파라미터로 보내짐
   );
 
   if (response.statusCode == 200) {
-    String summary = response.body;
+    String summary = response.body;  // 요약된 본문을 바로 사용
     print("요약 받기 성공");
     return summary;
   } else {
     print("요약 받기 실패");
-    return " ";
+    return "요약을 불러올 수 없습니다.";
   }
 }

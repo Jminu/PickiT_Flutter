@@ -22,13 +22,11 @@ class _ArticleScreenState extends State<ArticleScreen> {
   @override
   void initState() {
     super.initState();
-    // WebView 초기화
     _initializeWebView();
   }
 
   // WebView 초기화 메서드
   void _initializeWebView() async {
-    // 플랫폼 초기화가 아닌, WebViewController만 사용
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)  // JavaScript 허용
       ..loadRequest(Uri.parse(widget.article.url));  // URL 로딩
@@ -36,7 +34,6 @@ class _ArticleScreenState extends State<ArticleScreen> {
 
   // 기사 최상단으로 스크롤
   void _scrollToTop() async {
-    // WebView에서 최상단으로 스크롤
     await _controller.scrollTo(0, 0);
   }
 
@@ -100,7 +97,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
       String summary = await getSummary(newsLink);
 
       // 로딩 다이얼로그 닫기
-      Navigator.pop(context);
+      Navigator.pop(context); // 로딩 다이얼로그 닫기
 
       // 요약 팝업 창 표시
       showDialog(
@@ -121,7 +118,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
       );
     } catch (e) {
       // 에러 발생 시 처리
-      Navigator.pop(context); // 로딩 다이얼로그 닫기
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("요약 중 오류 발생: $e")),
       );
@@ -132,15 +129,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
   Future<void> _scrapArticle(
       BuildContext context, String userId, Article article) async {
     try {
-      await Global.addMyNews(
-        userId,
-        News(
-          article.title,
-          article.url,
-          article.date,
-          article.imageUrl,
-        ),
+      News news = News(
+        title: article.title,
+        link: article.url,
+        published: article.date,
+        imageUrl: article.imageUrl,
       );
+
+      await Global.addMyNews(userId, news);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("기사가 스크랩되었습니다!")),
       );
