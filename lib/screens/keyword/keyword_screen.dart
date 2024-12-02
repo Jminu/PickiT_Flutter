@@ -25,7 +25,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
   // 데이터 새로 고침 함수
   Future<void> _refreshKeywords() async {
     setState(() {
-      _initializeKeywords();  // 키워드를 다시 로드
+      _initializeKeywords(); // 키워드를 다시 로드
     });
   }
 
@@ -49,7 +49,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
         centerTitle: true,
       ),
       body: RefreshIndicator(
-        onRefresh: _refreshKeywords,  // 새로 고침을 위한 함수 호출
+        onRefresh: _refreshKeywords, // 새로 고침을 위한 함수 호출
         child: Column(
           children: [
             const SizedBox(height: 15),
@@ -65,38 +65,54 @@ class _KeywordScreenState extends State<KeywordScreen> {
             Expanded(
               child: activeKeywords.isEmpty
                   ? const Center(
-                child: Text(
-                  "등록된 키워드가 없습니다.",
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-                  : ListView.builder(
-                itemCount: activeKeywords.length,
-                itemBuilder: (context, index) {
-                  final keyword = activeKeywords[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
-                    ),
-                    child: SwipeToDelete(
-                      onDelete: () async {
-                        await _keywordManager.removeKeyword(keyword);
-                        setState(() {
-                          activeKeywords.removeAt(index);
-                        });
-                      },
-                      child: ListTile(
-                        title: Text(
-                          keyword.keyWord,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                        trailing: const Icon(Icons.chevron_left),
+                      child: Text(
+                        "등록된 키워드가 없습니다.",
+                        style: TextStyle(fontSize: 16),
                       ),
+                    )
+                  : ListView.builder(
+                      itemCount: activeKeywords.length,
+                      itemBuilder: (context, index) {
+                        final keyword = activeKeywords[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 32.0,
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white, // 배경색
+                              borderRadius:
+                                  BorderRadius.circular(18.0), // 모서리 둥글게
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey
+                                      .withOpacity(0.3), // 그림자 색상 및 투명도
+                                  spreadRadius: 2, // 그림자 퍼짐 정도
+                                  blurRadius: 3, // 그림자 흐림 정도
+                                  offset: Offset(1, 3), // 그림자 위치 (x, y)
+                                ),
+                              ],
+                            ),
+                            child: SwipeToDelete(
+                              onDelete: () async {
+                                await _keywordManager.removeKeyword(keyword);
+                                setState(() {
+                                  activeKeywords.removeAt(index);
+                                });
+                              },
+                              child: ListTile(
+                                title: Text(
+                                  keyword.keyWord,
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                trailing: const Icon(Icons.chevron_left),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
