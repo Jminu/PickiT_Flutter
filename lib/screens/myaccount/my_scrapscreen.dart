@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../News.dart';
 import '../../global.dart';
 import '../../models/article.dart';
 import '../Article/article_screen.dart';
+import 'package:firebase_database/firebase_database.dart'; // Firebase Realtime Database 사용
 
 class MyScrapScreen extends StatefulWidget {
   final String? userId;
@@ -21,7 +21,7 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
   @override
   void initState() {
     super.initState();
-    String? userId = widget.userId ?? Global.getLoggedInUserId(); // 전달된 userId 또는 글로벌 ID
+    String? userId = widget.userId ?? Global.getLoggedInUserId();; // 전달된 userId 또는 글로벌 ID
     if (userId != null) {
       _myNewsFuture = Global.getMyNews(userId); // 유저 ID로 스크랩된 뉴스 호출
     } else {
@@ -37,6 +37,46 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
         _myNewsFuture = Global.getMyNews(userId);
       }
     });
+  }
+
+  // Firebase에서 뉴스 삭제하기
+  Future<void> _deleteNewsFromFirebase(String userId, String newsTitle) async {
+    try {
+      await Global.removeMyNews(userId, newsTitle); // Global.removeMyNews를 통해 Firebase에서 삭제
+      print("뉴스 삭제 성공");
+      // 삭제 후 화면 갱신
+      _refreshScrapNews();
+    } catch (e) {
+      print("뉴스 삭제 실패: $e");
+    }
+  }
+
+  // 삭제 확인 팝업을 띄우는 함수
+  void _showDeleteConfirmationDialog(String userId, String newsTitle) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("삭제하시겠습니까?"),
+          content: Text("이 뉴스는 영구적으로 삭제됩니다."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 취소
+              },
+              child: Text("취소"),
+            ),
+            TextButton(
+              onPressed: () {
+                _deleteNewsFromFirebase(userId, newsTitle); // 삭제
+                Navigator.of(context).pop(); // 팝업 닫기
+              },
+              child: Text("삭제"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -84,6 +124,13 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
                           ),
                         ),
                       );
+                    },
+                    onLongPress: () {
+                      // 길게 눌렀을 때 삭제 확인 팝업 띄우기
+                      String? userId = widget.userId ?? Global.getLoggedInUserId();
+                      if (userId != null) {
+                        _showDeleteConfirmationDialog(userId, news.title);
+                      }
                     },
                     child: ListTile(
                       leading: news.imageUrl != null && news.imageUrl!.isNotEmpty
