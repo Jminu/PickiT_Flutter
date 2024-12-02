@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:pickit_flutter/screens/home/home_screen.dart';
 import 'package:pickit_flutter/screens/login/login_screen.dart';
@@ -33,8 +32,10 @@ void main() async {
     print("Firebase 초기화 실패");
   }
 
-  //showDB();
+  showDB();
+
   runApp(const MyApp());
+
 
   /**
    * 이 부분이 실행되면, 뉴스기사 긁어옵니다.
