@@ -25,13 +25,7 @@ class KeywordManager {
 
       data.forEach((key, value) {
         //Map을 돌면서
-        bool isActivated;
-        if (value["isActivated"].toLowerCase() == "true") {
-          isActivated = true;
-        } else {
-          isActivated = false;
-        }
-        Keyword keyword = Keyword(value["keyWord"], isActivated); //키워드 객체를 생성
+        Keyword keyword = Keyword(value["keyWord"]); //키워드 객체를 생성
         myKeywords.add(keyword); //List에 넣음
       });
 

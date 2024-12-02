@@ -52,10 +52,10 @@ class Global {
         // 가져온 Map을 순회
         Map<String, dynamic> newsData = Map<String, dynamic>.from(data[key]);
         News news = News(
-          newsData["title"] ?? "제목 없음",
-          newsData["link"] ?? "링크 없음",
-          newsData["published"] ?? "발행일 없음",
-          newsData["imageUrl"] ?? "", // imageUrl 디폴트 값 처리
+          title: newsData["title"] ?? "제목 없음", // title
+          link: newsData["link"] ?? "링크 없음", // link
+          published: newsData["published"] ?? "발행일 없음", // published
+          imageUrl: newsData["imageUrl"] ?? "", // imageUrl 처리
         );
         myNews.add(news);
       }
