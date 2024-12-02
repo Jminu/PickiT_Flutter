@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 // 뉴스 데이터 디버깅
                 print(
-                    "뉴스 제목: ${news.title}, 링크: ${news.link}, 발행일: ${news.published}");
+                    "뉴스 제목: ${news.title}, 링크: ${news.link}, 발행일: ${news.published}, Img링크: ${news.imageUrl}");
 
                 return GestureDetector(
                   onTap: () {
