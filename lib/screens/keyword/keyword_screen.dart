@@ -21,11 +21,9 @@ class _KeywordScreenState extends State<KeywordScreen> {
     _initializeKeywords();
   }
 
-  //초기 로그인 될때 데이터 최신화
-  // 데이터 새로 고침 함수
   Future<void> _refreshKeywords() async {
     setState(() {
-      _initializeKeywords(); // 키워드를 다시 로드
+      _initializeKeywords();
     });
   }
 
@@ -33,7 +31,6 @@ class _KeywordScreenState extends State<KeywordScreen> {
     userId = Global.getLoggedInUserId();
     if (userId != null) {
       _keywordManager = KeywordManager(userId!);
-      // Fetching keywords using KeywordManager
       List<Keyword> keywords = await _keywordManager.getMyKeywords();
       setState(() {
         activeKeywords = keywords;
@@ -49,17 +46,16 @@ class _KeywordScreenState extends State<KeywordScreen> {
         centerTitle: true,
       ),
       body: RefreshIndicator(
-        onRefresh: _refreshKeywords, // 새로 고침을 위한 함수 호출
+        onRefresh: _refreshKeywords,
         child: Column(
           children: [
             const SizedBox(height: 15),
             KeywordRegisterButton(
-              onKeywordAdded: (Keyword newKeyword) {
+              onKeywordAdded: (newKeyword) {
                 setState(() {
                   activeKeywords.add(newKeyword);
                 });
               },
-              keywordManager: _keywordManager,
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -81,16 +77,14 @@ class _KeywordScreenState extends State<KeywordScreen> {
                           ),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.white, // 배경색
-                              borderRadius:
-                                  BorderRadius.circular(18.0), // 모서리 둥글게
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(18.0),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey
-                                      .withOpacity(0.3), // 그림자 색상 및 투명도
-                                  spreadRadius: 2, // 그림자 퍼짐 정도
-                                  blurRadius: 3, // 그림자 흐림 정도
-                                  offset: Offset(1, 3), // 그림자 위치 (x, y)
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 2,
+                                  blurRadius: 3,
+                                  offset: Offset(1, 3),
                                 ),
                               ],
                             ),
