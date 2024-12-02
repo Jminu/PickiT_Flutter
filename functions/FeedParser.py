@@ -38,6 +38,9 @@ def fetchRSSfeed() -> list:
                 if not imageUrl and "enclosures" in entry and len(entry.enclosures) > 0:
                     imageUrl = entry.enclosures[0].get("href", None)
 
+                if not imageUrl and "media_thumnail" in entry:
+                    imageUrl = entry.media_thumbnail[0].get("url", None)
+
                 article = {
                     "title": entry.title,  # 파싱한 기사 타이틀
                     "link": entry.link,  # 파싱한 기사 링크
