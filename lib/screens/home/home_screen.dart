@@ -77,27 +77,19 @@ class _HomeScreenState extends State<HomeScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              // 에러 메시지 출력
               return Center(child: Text("오류 발생: ${snapshot.error}"));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              // 데이터가 없을 때 디버깅 출력 추가
-              print("받은 데이터가 없습니다: ${snapshot.data}");
               return const Center(child: Text("뉴스 데이터가 없습니다."));
             } else {
-              // 받은 데이터 디버깅용 출력
-              print("받은 데이터: ${snapshot.data}");
               final newsList = snapshot.data!;
               return ListView.builder(
                 itemCount: newsList.length,
                 itemBuilder: (context, index) {
                   final news = newsList[index];
 
-                  // 뉴스 데이터 디버깅
-                  print(
-                      "뉴스 제목: ${news.title}, 링크: ${news.link}, 발행일: ${news.published}, Img링크: ${news.imageUrl}");
-
                   return GestureDetector(
                     onTap: () {
+                      // 클릭 시 뉴스 상세 페이지로 이동
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -113,18 +105,61 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       );
                     },
-                    child: ListTile(
-                      leading: news.imageUrl != null && news.imageUrl!.isNotEmpty
-                          ? Image.network(
-                        news.imageUrl!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                          : const Icon(Icons.image_not_supported),
-                      title: Text(news.title),
-                      subtitle: Text(news.published),
-                      trailing: const Icon(Icons.arrow_forward),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Card(
+                        elevation: 4, // 카드에 그림자 효과 추가
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12), // 둥근 모서리
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // 이미지
+                              news.imageUrl != null && news.imageUrl!.isNotEmpty
+                                  ? ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.network(
+                                        news.imageUrl!,
+                                        width: double.infinity, // 가로 전체를 채움
+                                        height: 180, // 이미지 크기 줄이기
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : const Icon(
+                                      Icons.image_not_supported,
+                                      size: 120, // 이미지가 없을 때 기본 아이콘 크기 줄이기
+                                    ),
+                              const SizedBox(height: 12), // 간격 줄이기
+
+                              // 제목과 발행일
+                              Text(
+                                news.title,
+                                style: TextStyle(
+                                  fontSize: 16, // 제목 크기 줄이기
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis, // 제목이 길어지면 생략
+                              ),
+                              const SizedBox(height: 6), // 간격 줄이기
+                              Text(
+                                news.published,
+                                style: TextStyle(
+                                  fontSize: 12, // 발행일 크기 줄이기
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              const SizedBox(height: 8), // 간격 줄이기
+
+                              // 설명 부분 (내용이 있다면 표시)
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -136,4 +171,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
