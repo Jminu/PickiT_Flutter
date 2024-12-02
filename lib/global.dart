@@ -17,17 +17,15 @@ class Global {
     return loggedInUserId;
   }
 
-
-// 뉴스 스크랩 함수 (유저의 DB에 저장)
+//뉴스 스크랩 함수(유저의 DB에 저장)
   static Future<void> addMyNews(String userId, News news) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref(
-        "users/$userId/myNews").push();
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/$userId/myNews").push();
 
     Map<String, String> mapMyNews = {
       "title": news.title,
       "link": news.link,
       "published": news.published,
-      "imageUrl": news.imageUrl ?? "", // imageUrl이 없으면 빈 문자열로 저장
     };
 
     print("유저 ID: $userId");
@@ -37,27 +35,27 @@ class Global {
     print("뉴스 스크랩 완료");
   }
 
-// 스크랩한 뉴스를 가져옴
+//스크랩한 뉴스를 가져옴
   static Future<List<News>> getMyNews(String userId) async {
     List<News> myNews = []; // 스크랩한 뉴스들을 저장
 
-    DatabaseReference ref = FirebaseDatabase.instance.ref(
-        "users/$userId/myNews");
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/$userId/myNews");
     final snapshot = await ref.get(); // DB에서 스크랩 뉴스 snapshot으로 가져옴
 
     if (snapshot.exists) {
       // 스크랩한 뉴스가 있다면
-      Map<dynamic, dynamic> data = snapshot.value as Map<dynamic,
-          dynamic>; // Map 객체로 변환
+      Map<dynamic, dynamic> data =
+          snapshot.value as Map<dynamic, dynamic>; // Map 객체로 변환
 
       for (var key in data.keys) {
         // 가져온 Map을 순회
         Map<String, dynamic> newsData = Map<String, dynamic>.from(data[key]);
         News news = News(
-          title: newsData["title"] ?? "제목 없음", // title
-          link: newsData["link"] ?? "링크 없음", // link
-          published: newsData["published"] ?? "발행일 없음", // published
-          imageUrl: newsData["imageUrl"] ?? "", // imageUrl 처리
+          newsData["title"] ?? "제목 없음",
+          newsData["link"] ?? "링크 없음",
+          newsData["published"] ?? "발행일 없음",
+          newsData["imageUrl"] ?? "", // imageUrl 디폴트 값 처리
         );
         myNews.add(news);
       }
@@ -68,14 +66,29 @@ class Global {
     return myNews;
   }
 
-  static Future<void> deleteMyNews(String userId, News news) async {
-    DatabaseReference ref = FirebaseDatabase.instance.ref(
-        "users/$userId/myNews"); // DB의 "myNews" 경로에서 삭제
+  //나의 스크랩 목록에서 특정뉴스를 삭제(userId: 사용자아이디 title: 삭제하려는 뉴스 제목)
+  //사용시 await붙여야함
+  static Future<void> removeMyNews(String? userId, String title) async {
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users/$userId/myNews");
+    final snapshot = await ref.get();
 
-    // 뉴스의 특정 키를 찾은 후 삭제 (뉴스의 키는 Firebase에서 자동으로 생성됨)
-    DatabaseReference newsRef = ref.child(news.link); // 링크를 키로 사용 (적절한 키를 선택)
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> data =
+          snapshot.value as Map<dynamic, dynamic>; //Map객체로 변환
+      String keyToDelete;
 
-    await newsRef.remove(); // 해당 뉴스 삭제
-    print("뉴스 삭제 완료");
+      for (var key in data.keys) {
+        Map<String, dynamic> myNewsData = Map<String, dynamic>.from(data[key]);
+        if (myNewsData["title"] == title) {
+          //제목 일치하면
+          keyToDelete = key; //삭제할 키 저장
+          await ref.child(keyToDelete).remove(); //일치하는 뉴스의 키 삭제(스크랩 항목중에서)
+          print("스크랩한 뉴스 삭제완료");
+        }
+      }
+    } else {
+      print("removeMyNews: snapshot이 존재하지 않음");
+    }
   }
 }

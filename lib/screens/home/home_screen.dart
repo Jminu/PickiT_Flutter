@@ -23,13 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _newsFuture = getFilteredFeeds();
   }
 
-  // 새로 고침 시 데이터를 갱신하는 함수
-  Future<void> _refreshNews() async {
-    setState(() {
-      _newsFuture = getFilteredFeeds(); // 새로 고침을 위해 future 업데이트
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,61 +63,69 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: _refreshNews,  // 새로 고침을 위한 함수 호출
-        child: FutureBuilder<List<News>>(
-          future: _newsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              // 에러 메시지 출력
-              return Center(child: Text("오류 발생: ${snapshot.error}"));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text("뉴스 데이터가 없습니다."));
-            } else {
-              final newsList = snapshot.data!;
-              return ListView.builder(
-                itemCount: newsList.length,
-                itemBuilder: (context, index) {
-                  final news = newsList[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ArticleScreen(
-                            article: Article(
-                              title: news.title,
-                              date: news.published,
-                              imageUrl: "",
-                              content: "뉴스 본문 내용을 여기에 추가하세요.",
-                              url: news.link,
-                            ),
+      body: FutureBuilder<List<News>>(
+        future: _newsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            // 에러 메시지 출력
+            return Center(child: Text("오류 발생: ${snapshot.error}"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            // 데이터가 없을 때 디버깅 출력 추가
+            print("받은 데이터가 없습니다: ${snapshot.data}");
+            return const Center(child: Text("뉴스 데이터가 없습니다."));
+          } else {
+            // 받은 데이터 디버깅용 출력
+            print("받은 데이터: ${snapshot.data}");
+            final newsList = snapshot.data!;
+            return ListView.builder(
+              itemCount: newsList.length,
+              itemBuilder: (context, index) {
+                final news = newsList[index];
+
+                // 뉴스 데이터 디버깅
+                print(
+                    "뉴스 제목: ${news.title}, 링크: ${news.link}, 발행일: ${news.published}, Img링크: ${news.imageUrl}");
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ArticleScreen(
+                          article: Article(
+                            title: news.title,
+                            date: news.published,
+                            imageUrl: "", // 뉴스 객체에 이미지가 없는 경우
+                            content: "뉴스 본문 내용을 여기에 추가하세요.",
+                            url: news.link, // 뉴스의 링크를 사용
                           ),
                         ),
-                      );
-                    },
-                    child: ListTile(
-                      leading: news.imageUrl != null && news.imageUrl!.isNotEmpty
-                          ? Image.network(
-                        news.imageUrl!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                          : const Icon(Icons.image_not_supported),
-                      title: Text(news.title),
-                      subtitle: Text(news.published),
-                      trailing: const Icon(Icons.arrow_forward),
-                    ),
-                  );
-                },
-              );
-            }
-          },
-        ),
+                      ),
+                    );
+                  },
+                  child: ListTile(
+                    leading: news.imageUrl != null && news.imageUrl!.isNotEmpty
+                        ? Image.network(
+                      news.imageUrl!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                    )
+                        : const Icon(Icons.image_not_supported),
+                    title: Text(news.title),
+                    subtitle: Text(news.published),
+                    trailing: const Icon(Icons.arrow_forward),
+                  ),
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
+
 }
+
