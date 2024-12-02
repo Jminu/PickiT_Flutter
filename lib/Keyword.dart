@@ -1,8 +1,8 @@
 class Keyword {
   String keyWord;
-  bool isActivated = true;
+  bool isActivated;
 
-  Keyword(this.keyWord, this.isActivated);
+  Keyword(this.keyWord, [this.isActivated = true]);
 
   String getKeyword() {
     return this.keyWord;
