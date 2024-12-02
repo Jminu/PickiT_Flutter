@@ -1,10 +1,11 @@
 import '../News.dart';
 import '../components/news_service.dart';
+import '../global.dart';
 
 class NewsController {
-  final NewsService _newsService = NewsService();
+
 
   Future<List<News>> fetchMyNews(String userId) async {
-    return await _newsService.getMyNews(userId);
+    return await Global.getMyNews(userId); // Global의 메서드를 호출
   }
 }

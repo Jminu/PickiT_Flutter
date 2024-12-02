@@ -7,7 +7,8 @@ class Product {
   final int heartCount;
   final int commentsCount;
   final String? author; // 선택적 필드
-  final String? source; // 선택적 필드
+  final String? source; // 선택적 필드\
+  final String url;
 
   Product({
     required this.title,
@@ -17,6 +18,7 @@ class Product {
     required this.address,
     required this.heartCount,
     required this.commentsCount,
+    required this.url,
     this.author, // 선택적
     this.source, // 선택적
   });

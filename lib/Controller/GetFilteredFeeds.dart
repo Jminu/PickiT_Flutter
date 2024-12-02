@@ -10,30 +10,35 @@ import '../News.dart';
 * 요청된 python에서는 전달받은 userId를 활용해 DB에서 userId에 저장된 키워드 리스트
 * 불러오고, 그 키워드 리스트들과 관련된 뉴스만 필터링해서 response한다.
 *  */
-Future<List<dynamic>> getFilteredFeeds() async {
+Future<List<News>> getFilteredFeeds() async {
   String? userId = Global.getLoggedInUserId();
+
+  if (userId == null) {
+    throw Exception("유저 ID를 가져올 수 없습니다. 로그인하세요.");
+  }
+
   final response = await http.post(
     Uri.parse("https://getfilterednewslist-z5lahfby6q-uc.a.run.app"),
-    body: {
-      'userId': userId,
-    },
+    body: {'userId': userId},
   );
 
   if (response.statusCode == 200) {
-    List<News> filteredNews = []; //필터링된 뉴스 정보(제목, 링크, 발행날짜)
+    List<News> filteredNews = [];
     print("서버로 userId 보내기 성공");
-    List<dynamic> filteredFeeds =
-        jsonDecode(response.body); //응답받은 Json을 객체로 list에 저장
+    List<dynamic> filteredFeeds = jsonDecode(response.body);
 
     for (var feed in filteredFeeds) {
       News news = News(
-          feed["title"], feed["link"], feed["published"]); //뉴스 객체 생성해서 정보 넣음
-      filteredNews.add(news); //생성한 뉴스 객체를, 뉴스 객체 리스트에 넣음
+        feed["title"],
+        feed["link"],
+        feed["published"],
+      );
+      filteredNews.add(news);
     }
 
-    return filteredNews; //기사 리스트 반환
+    return filteredNews;
   } else {
     print("서버로 userId 보내기 실패: ${response.statusCode}");
-    return []; //빈 값 반환
+    return [];
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../../News.dart';
 import '../../components/news_detailscreen.dart';
-import '../../components/news_service.dart';
 import '../../global.dart';
 
 class MyScrapScreen extends StatefulWidget {
@@ -25,8 +24,10 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
     // 위젯에서 전달된 userId를 사용
     String? userId = widget.userId ?? Global.getLoggedInUserId(); // 전달된 userId 또는 글로벌 ID
     if (userId != null) {
-      _myNewsFuture = NewsService().getMyNews(userId); // 유저 ID로 스크랩된 뉴스 호출
+      // Firebase에서 스크랩된 뉴스 가져오기
+      _myNewsFuture = Global.getMyNews(userId); // 유저 ID로 스크랩된 뉴스 호출
     } else {
+      // 유저 ID가 없으면 빈 리스트 반환
       _myNewsFuture = Future.value([]); // 유저 ID가 없으면 빈 리스트 반환
     }
   }
