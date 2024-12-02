@@ -32,6 +32,7 @@ Future<List<News>> getFilteredFeeds() async {
         feed["title"],
         feed["link"],
         feed["published"],
+        feed["imageUrl"]
       );
       filteredNews.add(news);
     }
