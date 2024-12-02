@@ -5,11 +5,40 @@ import '../../News.dart';
 import '../../models/article.dart';
 import '../../Controller/GetSummary.dart'; // 요약 함수
 import '../../global.dart';
+import 'components/article_floating_button.dart'; // Floating Button
 
-class ArticleScreen extends StatelessWidget {
+class ArticleScreen extends StatefulWidget {
   final Article article;
 
   const ArticleScreen({Key? key, required this.article}) : super(key: key);
+
+  @override
+  _ArticleScreenState createState() => _ArticleScreenState();
+}
+
+class _ArticleScreenState extends State<ArticleScreen> {
+  late final WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // WebView 초기화
+    _initializeWebView();
+  }
+
+  // WebView 초기화 메서드
+  void _initializeWebView() async {
+    // 플랫폼 초기화가 아닌, WebViewController만 사용
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)  // JavaScript 허용
+      ..loadRequest(Uri.parse(widget.article.url));  // URL 로딩
+  }
+
+  // 기사 최상단으로 스크롤
+  void _scrollToTop() async {
+    // WebView에서 최상단으로 스크롤
+    await _controller.scrollTo(0, 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +52,7 @@ class ArticleScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.open_in_browser),
             onPressed: () async {
-              final url = article.url; // 기사 원문 URL
+              final url = widget.article.url; // 기사 원문 URL
               if (await canLaunchUrl(Uri.parse(url))) {
                 await launchUrl(Uri.parse(url));
               } else {
@@ -35,42 +64,25 @@ class ArticleScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: WebView(
-        initialUrl: article.url, // 기사 원문 URL을 로드
-        javascriptMode: JavascriptMode.unrestricted, // JavaScript 허용
+      body: WebViewWidget(
+        controller: _controller,  // WebViewController 전달
       ),
-      floatingActionButton: _buildFloatingActionButtons(context),
-    );
-  }
-
-  // Floating Action Buttons 생성
-  Widget _buildFloatingActionButtons(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FloatingActionButton(
-          heroTag: 'bookmark',
-          onPressed: () async {
-            String? userId = Global.getLoggedInUserId();
-            if (userId != null) {
-              await _scrapArticle(context, userId, article);
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("로그인이 필요합니다.")),
-              );
-            }
-          },
-          child: const Icon(Icons.bookmark),
-        ),
-        const SizedBox(height: 16),
-        FloatingActionButton(
-          heroTag: 'summarize',
-          onPressed: () async {
-            await _showSummaryPopup(context, article.url);
-          },
-          child: const Icon(Icons.remove_red_eye), // 요약 아이콘
-        ),
-      ],
+      floatingActionButton: ArticleFloatingButton(
+        onBookmark: () async {
+          String? userId = Global.getLoggedInUserId();
+          if (userId != null) {
+            await _scrapArticle(context, userId, widget.article);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("로그인이 필요합니다.")),
+            );
+          }
+        },
+        onScrollToTop: _scrollToTop,  // 최상단으로 스크롤하는 함수 전달
+        onSummarize: () async {
+          await _showSummaryPopup(context, widget.article.url);
+        },
+      ),
     );
   }
 
