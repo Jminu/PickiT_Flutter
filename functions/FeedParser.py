@@ -9,8 +9,15 @@ RSS_FEED = [
     "https://www.hankyung.com/feed/all-news",  # 한국경제
     "https://www.yonhapnewstv.co.kr/browse/feed/",  # 연합뉴스
     "https://www.khan.co.kr/rss/rssdata/total_news.xml",  # 경향신문
-    "http://www.joongang.tv/rss/allArticle.xml"  # 중앙일보
-
+    "http://www.joongang.tv/rss/allArticle.xml",  # 중앙일보
+    "http://rss.kmib.co.kr/data/kmibRssAll.xml",  # 국민일보
+    "https://www.mediatoday.co.kr/rss/allArticle.xml",  # 미디어오늘
+    "https://www.hani.co.kr/rss/"  # 한겨례 신문
+    "https://www.pressian.com/api/v3/site/rss/news",  # 프레시안
+    "https://www.ablenews.co.kr/rss/allArticle.xml",  # 에이블뉴스
+    "http://www.sisajournal.com/rss/allArticle.xml" # 시사저널
+    "http://www.segye.com/Articles/RSSList/segye_recent.xml" # 세계일보
+    # "https://akngs.github.io/knews-rss/all.xml" # RSS feed모음(from gitHub)
 ]
 
 
@@ -22,7 +29,7 @@ def fetchRSSfeed() -> list:
             feed = feedparser.parse(feedUrl)  # 피드 데이터를 파싱
             print(f"{feedUrl}에서 기사를 가져옵니다.")
             for entry in feed.entries:  # 각 항목에 대한 처리
-                imageUrl = None # 이미지 주소
+                imageUrl = None  # 이미지 주소
                 # media_content에서 이미지 URL 추출
                 if "media_content" in entry and len(entry.media_content) > 0:
                     imageUrl = entry.media_content[0].get("url", None)
@@ -35,7 +42,7 @@ def fetchRSSfeed() -> list:
                     "title": entry.title,  # 파싱한 기사 타이틀
                     "link": entry.link,  # 파싱한 기사 링크
                     "published": entry.published,  # 파싱한 기사 발행날짜
-                    "imageUrl": imageUrl # 이미지(썸내일)가져올 Url
+                    "imageUrl": imageUrl  # 이미지(썸내일)가져올 Url
                 }
                 allArticles.append(article)
         except Exception as e:
