@@ -32,9 +32,9 @@ void main() async {
     print("Firebase 초기화 실패");
   }
 
-  //showDB();
+  showDB();
 
-  runApp(const MyApp());
+  //runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
