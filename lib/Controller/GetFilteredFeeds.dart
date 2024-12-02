@@ -29,9 +29,9 @@ Future<List<News>> getFilteredFeeds() async {
 
     for (var feed in filteredFeeds) {
       News news = News(
-        feed["title"],
-        feed["link"],
-        feed["published"],
+       title: feed["title"],
+        link: feed["link"],
+        published :feed["published"],
       );
       filteredNews.add(news);
     }

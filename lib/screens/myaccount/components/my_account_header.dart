@@ -12,79 +12,7 @@ class MyAccountHeader extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         child: Column(
           children: [
-            _buildProfileRow(),
-            const SizedBox(height: 30),
-            _buildProfileButton(),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileRow() {
-    return Row(
-      children: [
-        Stack(
-          children: [
-            SizedBox(
-              width: 65,
-              height: 65,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(32.5),
-                child: Image.network(
-                  "https://picsum.photos/200/100",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: Colors.grey[100],
-                ),
-                child: Icon(
-                  Icons.camera_alt_outlined,
-                  size: 15,
-                ),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(width: 18),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("최최최명헌", style: textTheme().displayMedium),
-            const SizedBox(height: 10),
-            Text("나는 나입니다."),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProfileButton() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color(0xFFD4D5DD),
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(6.0),
-        ),
-        height: 45,
-        child: Center(
-          child: Text(
-            '프로필 보기',
-            style: textTheme().titleMedium,
-          ),
         ),
       ),
     );

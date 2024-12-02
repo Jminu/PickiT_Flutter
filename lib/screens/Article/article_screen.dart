@@ -132,14 +132,17 @@ class _ArticleScreenState extends State<ArticleScreen> {
   Future<void> _scrapArticle(
       BuildContext context, String userId, Article article) async {
     try {
+      // News 객체로 변환
+      News news = News(
+        title: article.title,
+        link: article.url,
+        published: article.date,
+        imageUrl: article.imageUrl,
+      );
+
       await Global.addMyNews(
         userId,
-        News(
-          article.title,
-          article.url,
-          article.date,
-          article.imageUrl,
-        ),
+        news,  // News 객체 전달
       );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("기사가 스크랩되었습니다!")),
@@ -150,4 +153,5 @@ class _ArticleScreenState extends State<ArticleScreen> {
       );
     }
   }
+
 }

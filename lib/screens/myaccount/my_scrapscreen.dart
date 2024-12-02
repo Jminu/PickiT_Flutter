@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../News.dart';
-import '../../components/news_detailscreen.dart';
 import '../../global.dart';
+import '../Article/article_screen.dart';
 
 class MyScrapScreen extends StatefulWidget {
-  final String? userId; //userId를 필드로 추가
+  final String? userId; // userId를 필드로 추가
 
   const MyScrapScreen({Key? key, this.userId}) : super(key: key);
 
@@ -20,14 +20,10 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
   @override
   void initState() {
     super.initState();
-
-    // 위젯에서 전달된 userId를 사용
     String? userId = widget.userId ?? Global.getLoggedInUserId(); // 전달된 userId 또는 글로벌 ID
     if (userId != null) {
-      // Firebase에서 스크랩된 뉴스 가져오기
       _myNewsFuture = Global.getMyNews(userId); // 유저 ID로 스크랩된 뉴스 호출
     } else {
-      // 유저 ID가 없으면 빈 리스트 반환
       _myNewsFuture = Future.value([]); // 유저 ID가 없으면 빈 리스트 반환
     }
   }
@@ -69,11 +65,12 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
                   subtitle: Text(news.published),
                   trailing: const Icon(CupertinoIcons.arrow_right),
                   onTap: () {
-                    // 뉴스 상세 화면으로 이동
+                    final article = news.toArticle();
+                    // 뉴스 클릭 시 ArticleScreen으로 이동
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NewsDetailScreen(news: news),
+                        builder: (context) => ArticleScreen(article: article),
                       ),
                     );
                   },
