@@ -133,14 +133,7 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
                       }
                     },
                     child: ListTile(
-                      leading: news.imageUrl != null && news.imageUrl!.isNotEmpty
-                          ? Image.network(
-                        news.imageUrl!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      )
-                          : const Icon(Icons.image_not_supported),
+                      leading: null, // 또는 Container(width: 50, height: 50)로 빈 공간 설정
                       title: Text(news.title),
                       subtitle: Text(news.published),
                       trailing: const Icon(Icons.arrow_forward),
