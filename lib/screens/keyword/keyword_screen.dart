@@ -49,7 +49,7 @@ class _KeywordScreenState extends State<KeywordScreen> {
         onRefresh: _refreshKeywords,
         child: Column(
           children: [
-            const SizedBox(height: 15),
+            const SizedBox(height: 5),
             KeywordRegisterButton(
               onKeywordAdded: (newKeyword) {
                 setState(() {
@@ -57,6 +57,8 @@ class _KeywordScreenState extends State<KeywordScreen> {
                 });
               },
             ),
+            const SizedBox(height: 15),
+            Text("*키워드를 삭제 하려면 오른쪽에서 왼쪽으로 밀어주세요"),
             const SizedBox(height: 20),
             Expanded(
               child: activeKeywords.isEmpty

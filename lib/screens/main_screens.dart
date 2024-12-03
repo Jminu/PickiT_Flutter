@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:pickit_flutter/screens/home/home_screen.dart';
 import 'package:pickit_flutter/screens/keyword/keyword_screen.dart';
 import 'package:pickit_flutter/screens/myaccount/my_scrapscreen.dart';
-
 import '../global.dart';
 
 class MainScreens extends StatefulWidget {
@@ -23,8 +21,8 @@ class _MainScreensState extends State<MainScreens> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          HomeScreen(),         // 홈 화면
-          KeywordScreen(),      // 키워드 화면
+          HomeScreen(), // 홈 화면
+          KeywordScreen(), // 키워드 화면
           MyScrapScreen(userId: Global.loggedInUserId), // 스크랩 화면
         ],
       ),

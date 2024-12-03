@@ -4,6 +4,7 @@ import 'package:pickit_flutter/theme.dart';
 import '../../keywordmanager.dart';
 import '../../global.dart';
 import 'package:pickit_flutter/Keyword.dart';
+import 'package:pickit_flutter/models/google_trends.dart';
 
 class KeywordRegisterScreen extends StatefulWidget {
   final Function(Keyword) onKeywordAdded; // Add this callback
@@ -102,10 +103,9 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
             style: Theme.of(context).textTheme.titleLarge,
           ),
           SizedBox(height: 15),
-          // Trend keywords list
-          Expanded(
-            child: ListView.builder(
-              itemCount: recommendedKeywords.length,
+          Expanded(child: /*ListView.builder*/ GoogleTrendsScreen()
+
+              /*itemCount: recommendedKeywords.length,
               itemBuilder: (context, index) {
                 final keyword = recommendedKeywords[index];
                 return Padding(
@@ -151,8 +151,8 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
                   ),
                 );
               },
-            ),
-          ),
+            ),*/
+              ),
         ],
       ),
     );
