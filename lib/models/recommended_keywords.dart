@@ -2,12 +2,12 @@
 import 'package:pickit_flutter/Keyword.dart';
 
 List<Keyword> recommendedKeywords = [
-  Keyword("Flutter", false),
-  Keyword("Dart", false),
-  Keyword("Firebase", false),
-  Keyword("React", false),
-  Keyword("Node.js", false),
-  Keyword("Python", false),
-  Keyword("Java", false),
-  Keyword("Kotlin", false),
+  Keyword("뷔", false),
+  Keyword("호날두", false),
+  Keyword("태연", false),
+  Keyword("백종원", false),
+  Keyword("흑백요리사", false),
+  Keyword("롯데백화점", false),
+  Keyword("부산", false),
+  Keyword("인텔", false),
 ];

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pickit_flutter/screens/home/home_screen.dart';
@@ -9,7 +8,6 @@ import 'package:pickit_flutter/screens/login/register_screen.dart';
 import 'package:pickit_flutter/screens/main_screens.dart';
 import 'package:pickit_flutter/screens/myaccount/my_scrapscreen.dart';
 import 'package:pickit_flutter/theme.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import './AuthManager.dart';
 import './KeywordManager.dart';
@@ -19,8 +17,6 @@ import '/global.dart';
 import './Controller/GetFilteredFeeds.dart';
 import './Controller/GetSummary.dart';
 import './ShowDB.dart';
-
-import 'models/product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +29,6 @@ void main() async {
   }
 
   showDB();
-
   runApp(const MyApp());
 }
 
