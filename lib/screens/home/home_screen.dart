@@ -33,14 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Image.asset(
-              "assets/logo.png",
-              height: 50,
-              width: 125,
-            ),
-          ],
+        centerTitle: true, // 제목을 가운데로 정렬
+        title: Image.asset(
+          "assets/logo.png",
+          height: 45,
+          width: 120,
         ),
         actions: [
           IconButton(
@@ -63,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(0.5),
           child: Divider(
-            thickness: 0.5,
+            thickness: 1,
             height: 0.5,
             color: Colors.grey,
           ),

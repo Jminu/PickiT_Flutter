@@ -28,8 +28,8 @@ class _ArticleScreenState extends State<ArticleScreen> {
   // WebView 초기화 메서드
   void _initializeWebView() async {
     _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)  // JavaScript 허용
-      ..loadRequest(Uri.parse(widget.article.url));  // URL 로딩
+      ..setJavaScriptMode(JavaScriptMode.unrestricted) // JavaScript 허용
+      ..loadRequest(Uri.parse(widget.article.url)); // URL 로딩
   }
 
   // 기사 최상단으로 스크롤
@@ -41,9 +41,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Pick iT", style: TextStyle(color: Colors.red)),
+        centerTitle: true, // 제목을 가운데로 정렬
+        title: Image.asset(
+          "assets/logo.png",
+          height: 45,
+          width: 120,
+        ),
+
         backgroundColor: Colors.white,
-        centerTitle: true,
         elevation: 0,
         actions: [
           IconButton(
@@ -62,7 +67,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
         ],
       ),
       body: WebViewWidget(
-        controller: _controller,  // WebViewController 전달
+        controller: _controller, // WebViewController 전달
       ),
       floatingActionButton: ArticleFloatingButton(
         onBookmark: () async {
@@ -75,7 +80,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
             );
           }
         },
-        onScrollToTop: _scrollToTop,  // 최상단으로 스크롤하는 함수 전달
+        onScrollToTop: _scrollToTop, // 최상단으로 스크롤하는 함수 전달
         onSummarize: () async {
           await _showSummaryPopup(context, widget.article.url);
         },
