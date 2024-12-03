@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:pickit_flutter/Keyword.dart'; // Keyword import
 
 class GoogleTrendsScreen extends StatefulWidget {
+  final Function(List<Keyword>) onKeywordsExtracted; // 키워드 추출 후 호출하는 콜백
+
+  const GoogleTrendsScreen({Key? key, required this.onKeywordsExtracted})
+      : super(key: key);
+
   @override
   _GoogleTrendsScreenState createState() => _GoogleTrendsScreenState();
 }
 
 class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
-  late final WebViewController _controller;
-  List<String> trendingKeywords = [];
-  bool isLoading = true; // 로딩 상태 관리
+  late WebViewController _controller;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -23,73 +28,48 @@ class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
       ..loadRequest(Uri.parse('https://trends.google.co.kr/trending?geo=KR'))
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageFinished: (_) => _extractKeywords(), // 페이지 로드 후 키워드 추출
+          onPageFinished: (_) => _extractKeywords(),
         ),
       );
   }
 
   Future<void> _extractKeywords() async {
     try {
-      // JavaScript 실행해서 키워드 가져옴 & 개발자 도구 켜서, 주소 찾아서 입력
       final result = await _controller.runJavaScriptReturningResult("""
         (() => {
           const elements = document.querySelectorAll('.mZ3RIc');
-          return Array.from(elements).map(el => el.innerText).join('|');
+          return Array.from(elements).map(el => el.innerText).slice(0, 15).join('|');
         })();
       """);
 
-      // 데이터 깨끗하게 처리
-      setState(() {
-        trendingKeywords = result
-            .toString()
-            .replaceAll('"', '')
-            .split('|')
-            .where((keyword) => keyword.isNotEmpty)
-            .toList();
-        isLoading = false; // 로딩 종료
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("데이터 추출 실패: $e")),
-      );
+      final keywords = result
+          .toString()
+          .replaceAll('"', '')
+          .split('|')
+          .where((keyword) => keyword.isNotEmpty)
+          .toList();
+
+      final keywordObjects = keywords.map((k) => Keyword(k)).toList();
+
+      widget.onKeywordsExtracted(keywordObjects); // 키워드 추출 후 콜백
       setState(() {
         isLoading = false;
       });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("데이터 추출 실패: $e")),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          if (isLoading)
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(),
-            )
-          else if (trendingKeywords.isNotEmpty)
-            Expanded(
-              child: ListView.builder(
-                itemCount: trendingKeywords.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(trendingKeywords[index]),
-                  );
-                },
-              ),
-            )
-          else
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                '키워드를 가져올 수 없습니다.',
-                style: TextStyle(fontSize: 16),
-                textAlign: TextAlign.center,
-              ),
-            ),
-        ],
-      ),
-    );
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : WebViewWidget(controller: _controller));
   }
 }
