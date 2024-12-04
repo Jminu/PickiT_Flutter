@@ -29,6 +29,7 @@ def getFilteredNewsList(request: https_fn.Request) -> https_fn.Response:
 @https_fn.on_request()
 def getSummary(request: https_fn.Request) -> https_fn.Response:
     newsLink = request.form.get("link")  # 뉴스기사의 link를 받아옴
+    newsTitle = request.form.get("title")  # 뉴스기사의 title을 받아옴
     if not newsLink:  # 뉴스링크 가져오는데 실패
         return https_fn.Response("뉴스 링크가 제공되지 않음", status=400)
 
@@ -36,6 +37,6 @@ def getSummary(request: https_fn.Request) -> https_fn.Response:
     if not article:  # 기사내용 가져오는데 실패하면
         return https_fn.Response("기사내용을 가져오지 못함", status=404)
 
-    summary = summarize_with_chatgpt(article)  # 기사 내용 요약
+    summary = summarize_with_chatgpt(article, newsTitle)  # 기사 내용 요약
     print(summary)
     return https_fn.Response(summary, status=200)
