@@ -21,7 +21,7 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
   @override
   void initState() {
     super.initState();
-    String? userId = widget.userId ?? Global.getLoggedInUserId();; // 전달된 userId 또는 글로벌 ID
+    String? userId = widget.userId ?? Global.getLoggedInUserId();
     if (userId != null) {
       _myNewsFuture = Global.getMyNews(userId); // 유저 ID로 스크랩된 뉴스 호출
     } else {
@@ -117,7 +117,7 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
                             article: Article(
                               title: news.title,
                               date: news.published,
-                              imageUrl: news.imageUrl ?? "",
+                              imageUrl: "", // 이미지는 제거
                               content: "뉴스 본문을 여기에 추가하세요.",
                               url: news.link,
                             ),
@@ -126,17 +126,46 @@ class _MyScrapScreenState extends State<MyScrapScreen> {
                       );
                     },
                     onLongPress: () {
-                      // 길게 눌렀을 때 삭제 확인 팝업 띄우기
                       String? userId = widget.userId ?? Global.getLoggedInUserId();
                       if (userId != null) {
                         _showDeleteConfirmationDialog(userId, news.title);
                       }
                     },
-                    child: ListTile(
-                      leading: null, // 또는 Container(width: 50, height: 50)로 빈 공간 설정
-                      title: Text(news.title),
-                      subtitle: Text(news.published),
-                      trailing: const Icon(Icons.arrow_forward),
+                    child: Card(
+                      color: Colors.deepPurpleAccent[50], // 배경 색상 설정 (조정 가능)
+                      elevation: 4, // 카드 그림자 효과
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // 둥근 모서리
+                      ),
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 이미지 관련 부분 제거
+                            const SizedBox(height: 12),
+                            Text(
+                              news.title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              news.published,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },
