@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../News.dart';
+import '../models/News.dart';
 
 class NewsDetailScreen extends StatelessWidget {
   final News news;

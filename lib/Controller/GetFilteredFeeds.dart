@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:pickit_flutter/global.dart';
 import 'package:http/http.dart' as http;
-import '../News.dart';
+import '../models/News.dart';
 
 /*
 * 이 함수는 키워드와 관련된 뉴스정보를 전달받는다(title, link, published)
