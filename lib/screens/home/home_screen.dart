@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             errorBuilder: (context, error, stackTrace) {
                               // 이미지를 가져오지 못했을 때 대체 이미지 표시
                               return Image.asset(
-                                "assets/logo.png", // 대체 이미지 경로 (로고 이미지 사용)
+                                "assets/logo2.png", // 대체 이미지 경로 (로고 이미지 사용)
                                 width: double.infinity,
                                 height: 180,
                                 fit: BoxFit.cover,
@@ -138,12 +138,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                         )
-                                  : const Icon(
-                                      Icons.image_not_supported,
-                                      size: 120, // 이미지가 없을 때 기본 아이콘 크기 줄이기
-                                    ),
-                              const SizedBox(height: 12), // 간격 줄이기
-
+                              : ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        "assets/logo2.png", // 기본 대체 이미지
+                        width: double.infinity,
+                        height: 180,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                               // 제목과 발행일
                               Text(
                                 news.title,
