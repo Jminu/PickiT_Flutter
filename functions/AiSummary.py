@@ -46,7 +46,7 @@ def summarize_with_chatgpt(article, max_tokens=500):
         model="gpt-3.5-turbo",  # 또는 gpt-4
         messages=[
             {"role": "system", "content": "당신은 기사를 요약하는 유능한 조수입니다."},
-            {"role": "user", "content": f"다음 기사를 한국어로 3줄 혹은 5줄로 요약해 주세요:\n\n{article}"}
+            {"role": "user", "content": f"다음 기사의 본문을 한국어로 요약해 주세요:\n\n{article}"}
         ],
         max_tokens=max_tokens,
         temperature=0.7
