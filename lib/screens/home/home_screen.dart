@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../Controller/GetFilteredFeeds.dart';
-import '../../News.dart';
+import '../../models/News.dart';
 import '../../components/news_service.dart';
 import '../../models/article.dart';
 import '../Article/article_screen.dart';
@@ -118,22 +118,35 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // 이미지
-                              news.imageUrl != null && news.imageUrl!.isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: Image.network(
-                                        news.imageUrl!,
-                                        width: double.infinity, // 가로 전체를 채움
-                                        height: 180, // 이미지 크기 줄이기
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : const Icon(
-                                      Icons.image_not_supported,
-                                      size: 120, // 이미지가 없을 때 기본 아이콘 크기 줄이기
-                                    ),
-                              const SizedBox(height: 12), // 간격 줄이기
-
+                          // 이미지 위젯 부분
+                          news.imageUrl != null && news.imageUrl!.isNotEmpty
+                          ? ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            news.imageUrl!,
+                            width: double.infinity, // 가로 전체를 채움
+                            height: 180, // 이미지 크기 줄이기
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              // 이미지를 가져오지 못했을 때 대체 이미지 표시
+                              return Image.asset(
+                                "assets/logo2.png", // 대체 이미지 경로 (로고 이미지 사용)
+                                width: double.infinity,
+                                height: 180,
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
+                        )
+                              : ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        "assets/logo2.png", // 기본 대체 이미지
+                        width: double.infinity,
+                        height: 180,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                               // 제목과 발행일
                               Text(
                                 news.title,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart'; // WebView import
-import '../../News.dart';
+import '../../models/News.dart';
 import '../../models/article.dart';
 import '../../Controller/GetSummary.dart'; // 요약 함수
 import '../../global.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../News.dart';
+import '../../models/News.dart';
 import '../../global.dart';
 import '../../models/article.dart';
 import '../Article/article_screen.dart';
