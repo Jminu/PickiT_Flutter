@@ -18,12 +18,16 @@ def getArticleContent(url):
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
 
+        # article태그 탐색
         paragraphs = soup.find_all('article')
         if paragraphs:
             content = " ".join([p.get_text() for p in paragraphs])
-        else:
+        else:  # article태크 없으면 p태그 기반 탐색
             paragraphs = soup.find_all('p')
-            content = " ".join([p.get_text() for p in paragraphs])
+            filteredParagraphs = [
+                p for p in paragraphs if not p.get('class') in [['ad'], ['footer'], ['comment']]
+            ]
+            content = " ".join([p.get_text() for p in filteredParagraphs])
 
         return clean_text(content)
     else:
