@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart' as http;
-import './News.dart';
+import 'models/News.dart';
 
 class Global {
   static String? loggedInUserId;
