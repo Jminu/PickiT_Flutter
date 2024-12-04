@@ -40,7 +40,7 @@ class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
       final result = await _controller.runJavaScriptReturningResult("""
         (() => {
           const elements = document.querySelectorAll('.mZ3RIc');
-          return Array.from(elements).map(el => el.innerText).slice(0, 20).join('|');
+          return Array.from(elements).map(el => el.innerText).slice(0, 10).join('|');
         })();
       """);
 
