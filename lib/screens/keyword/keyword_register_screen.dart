@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pickit_flutter/Keyword.dart';
 import 'package:pickit_flutter/models/google_trends.dart';
-import 'package:pickit_flutter/models/recommended_keywords.dart'; // 추천 키워드 리스트
+import 'package:pickit_flutter/models/recommended_keywords.dart';
+import 'package:pickit_flutter/global.dart';
+import 'package:pickit_flutter/KeywordManager.dart';
 
 class KeywordRegisterScreen extends StatefulWidget {
   final Function(Keyword) onKeywordAdded;
@@ -15,8 +17,19 @@ class KeywordRegisterScreen extends StatefulWidget {
 
 class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
   final TextEditingController _controller = TextEditingController();
+  late KeywordManager _keywordManager;
 
-  // 키워드 추출 후 추천 리스트에 추가하는 콜백
+  @override
+  void initState() {
+    super.initState();
+    final userId = Global.getLoggedInUserId(); // 사용자 ID 가져오기
+    if (userId != null) {
+      _keywordManager = KeywordManager(userId);
+    } else {
+      print("로그인된 사용자 ID가 없습니다.");
+    }
+  }
+
   void _onKeywordsExtracted(List<Keyword> extractedKeywords) {
     setState(() {
       recommendedKeywords = extractedKeywords;
@@ -26,13 +39,22 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
   Future<void> _registerAndActivateKeyword(String keywordText) async {
     final keyword = Keyword(keywordText);
 
-    // 키워드를 추천 리스트에서 삭제하고 활성화
+    // 추천 리스트에서 삭제
     setState(() {
       recommendedKeywords.removeWhere((k) => k.keyWord == keywordText);
     });
 
+    // 키워드를 Firebase에 저장
+    if (Global.getLoggedInUserId() != null) {
+      await _keywordManager.addKeyword(keyword); // 키워드 추가
+    } else {
+      print("사용자 ID를 찾을 수 없습니다.");
+    }
+
+    // 콜백으로 추가된 키워드 처리
     widget.onKeywordAdded(keyword);
 
+    // 성공 메시지 출력
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('키워드가 등록되었습니다.')),
     );
@@ -60,12 +82,12 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 MaterialButton(
                   onPressed: () {
                     final keyword = _controller.text.trim();
                     if (keyword.isNotEmpty) {
-                      _registerAndActivateKeyword(keyword);
+                      _registerAndActivateKeyword(keyword); // 등록 함수 호출
                       _controller.clear();
                     }
                   },
@@ -81,13 +103,14 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
               ],
             ),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(
             "🔥요새 키워드 트렌드",
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SizedBox(height: 15),
-          Expanded(
+          const SizedBox(height: 15),
+          SizedBox(
+            height: 3,
             child: GoogleTrendsScreen(
               onKeywordsExtracted: _onKeywordsExtracted,
             ),
@@ -98,15 +121,48 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
                 itemCount: recommendedKeywords.length,
                 itemBuilder: (context, index) {
                   final keyword = recommendedKeywords[index];
-                  return ListTile(
-                    title: Text(keyword.keyWord),
-                    trailing: MaterialButton(
-                      onPressed: () {
-                        _registerAndActivateKeyword(keyword.keyWord);
-                      },
-                      color: Colors.grey[400],
-                      textColor: Colors.white,
-                      child: const Text('등록'),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 26.0,
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 2,
+                            blurRadius: 3,
+                            offset: const Offset(1, 3),
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Text(
+                            keyword.keyWord,
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                        trailing: MaterialButton(
+                          onPressed: () {
+                            _registerAndActivateKeyword(keyword.keyWord);
+                          },
+                          color: Colors.grey.withOpacity(0.3),
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: const Text('등록'),
+                        ),
+                      ),
                     ),
                   );
                 },

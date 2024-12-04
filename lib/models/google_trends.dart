@@ -15,6 +15,8 @@ class GoogleTrendsScreen extends StatefulWidget {
 class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
   late WebViewController _controller;
   bool isLoading = true;
+  bool keywordsExtracted = false; // 키워드 추출 여부
+  List<Keyword> extractedKeywords = []; // 추출된 키워드 리스트
 
   @override
   void initState() {
@@ -38,7 +40,7 @@ class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
       final result = await _controller.runJavaScriptReturningResult("""
         (() => {
           const elements = document.querySelectorAll('.mZ3RIc');
-          return Array.from(elements).map(el => el.innerText).slice(0, 15).join('|');
+          return Array.from(elements).map(el => el.innerText).slice(0, 20).join('|');
         })();
       """);
 
@@ -52,8 +54,11 @@ class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
       final keywordObjects = keywords.map((k) => Keyword(k)).toList();
 
       widget.onKeywordsExtracted(keywordObjects); // 키워드 추출 후 콜백
+
       setState(() {
         isLoading = false;
+        keywordsExtracted = true;
+        extractedKeywords = keywordObjects;
       });
     } catch (e) {
       setState(() {
@@ -67,9 +72,21 @@ class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : WebViewWidget(controller: _controller));
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (keywordsExtracted) {
+      return ListView.builder(
+        itemCount: extractedKeywords.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(extractedKeywords[index].keyWord),
+          );
+        },
+      );
+    }
+
+    return const Center(child: Text('키워드가 없습니다.'));
   }
 }
