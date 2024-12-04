@@ -1,4 +1,4 @@
-import 'models/article.dart';
+import 'article.dart';
 
 class News {
   String title;
