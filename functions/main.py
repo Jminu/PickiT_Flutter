@@ -30,6 +30,7 @@ def getFilteredNewsList(request: https_fn.Request) -> https_fn.Response:
 def getSummary(request: https_fn.Request) -> https_fn.Response:
     newsLink = request.form.get("link")  # 뉴스기사의 link를 받아옴
     newsTitle = request.form.get("title")  # 뉴스기사의 title을 받아옴
+    print(newsTitle)
     if not newsLink:  # 뉴스링크 가져오는데 실패
         return https_fn.Response("뉴스 링크가 제공되지 않음", status=400)
 
