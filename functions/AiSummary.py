@@ -53,7 +53,7 @@ def summarize_with_chatgpt(article, title, max_tokens=500):
              "content": "당신은 기사를 요약하는 유능한 조수입니다. 당신의 임무를 제목과 관련된 핵심 내용을 추려 요약하는 것입니다."},
             {"role": "user", "content": f"다음은 기사 제목입니다.: {title}\n"
              f"다음은 기사 본문입니다: \n\n{article}"
-             "위 본문에서 제목과 직접적으로 관련된 핵심 내용만 한국어로 요약해 주세요. 제목과 관련 없는 내용은 포함하지 마세요."}
+             "위 본문에서 제목과 직접적으로 관련된 핵심 내용만 한국어로 3줄에서 5줄 사이로 요약해 주세요. 제목과 관련 없는 내용은 포함하지 마세요."}
         ],
         max_tokens=max_tokens,
         temperature=0.7

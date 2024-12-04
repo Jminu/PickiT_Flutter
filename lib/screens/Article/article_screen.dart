@@ -77,14 +77,14 @@ class _ArticleScreenState extends State<ArticleScreen> {
         },
         onScrollToTop: _scrollToTop,  // 최상단으로 스크롤하는 함수 전달
         onSummarize: () async {
-          await _showSummaryPopup(context, widget.article.url);
+          await _showSummaryPopup(context, widget.article.url, widget.article.title);
         },
       ),
     );
   }
 
   // 요약 팝업 함수
-  Future<void> _showSummaryPopup(BuildContext context, String newsLink) async {
+  Future<void> _showSummaryPopup(BuildContext context, String newsLink, String newsTitle) async {
     try {
       // 로딩 다이얼로그 표시
       showDialog(
@@ -94,7 +94,7 @@ class _ArticleScreenState extends State<ArticleScreen> {
       );
 
       // 요약 데이터 가져오기
-      String summary = await getSummary(newsLink);
+      String summary = await getSummary(newsLink, newsTitle);
 
       // 로딩 다이얼로그 닫기
       Navigator.pop(context); // 로딩 다이얼로그 닫기
