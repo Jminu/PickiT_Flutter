@@ -11,7 +11,6 @@ class KeywordScreen extends StatefulWidget {
 }
 
 class _KeywordScreenState extends State<KeywordScreen> {
-  String? userId;
   late KeywordManager _keywordManager;
   List<Keyword> activeKeywords = [];
 
@@ -21,21 +20,32 @@ class _KeywordScreenState extends State<KeywordScreen> {
     _initializeKeywords();
   }
 
-  Future<void> _refreshKeywords() async {
-    setState(() {
-      _initializeKeywords();
-    });
-  }
-
   Future<void> _initializeKeywords() async {
-    userId = Global.getLoggedInUserId();
+    final userId = Global.getLoggedInUserId();
     if (userId != null) {
-      _keywordManager = KeywordManager(userId!);
+      _keywordManager = KeywordManager(userId);
       List<Keyword> keywords = await _keywordManager.getMyKeywords();
       setState(() {
         activeKeywords = keywords;
       });
     }
+  }
+
+  Future<void> _refreshKeywords() async {
+    await _initializeKeywords();
+  }
+
+  void _addKeyword(Keyword keyword) {
+    setState(() {
+      activeKeywords.add(keyword);
+    });
+  }
+
+  Future<void> _deleteKeyword(Keyword keyword, int index) async {
+    await _keywordManager.removeKeyword(keyword);
+    setState(() {
+      activeKeywords.removeAt(index);
+    });
   }
 
   @override
@@ -52,12 +62,12 @@ class _KeywordScreenState extends State<KeywordScreen> {
             const SizedBox(height: 15),
             KeywordRegisterButton(
               onKeywordAdded: (newKeyword) {
-                setState(() {
-                  activeKeywords.add(newKeyword);
-                });
+                _addKeyword(newKeyword);
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
+            Text("*키워드를 삭제 하려면 오른쪽에서 왼쪽으로 밀어주세요"),
+            const SizedBox(height: 10),
             Expanded(
               child: activeKeywords.isEmpty
                   ? const Center(
@@ -75,33 +85,11 @@ class _KeywordScreenState extends State<KeywordScreen> {
                             vertical: 10.0,
                             horizontal: 32.0,
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(18.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                  offset: Offset(1, 3),
-                                ),
-                              ],
-                            ),
-                            child: SwipeToDelete(
-                              onDelete: () async {
-                                await _keywordManager.removeKeyword(keyword);
-                                setState(() {
-                                  activeKeywords.removeAt(index);
-                                });
-                              },
-                              child: ListTile(
-                                title: Text(
-                                  keyword.keyWord,
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                trailing: const Icon(Icons.chevron_left),
-                              ),
+                          child: SwipeToDelete(
+                            onDelete: () => _deleteKeyword(keyword, index),
+                            child: ListTile(
+                              title: Text(keyword.keyWord),
+                              trailing: const Icon(Icons.chevron_left),
                             ),
                           ),
                         );

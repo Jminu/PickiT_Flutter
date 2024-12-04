@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import '../../models/recommended_keywords.dart';
-import 'package:pickit_flutter/theme.dart';
-import '../../keywordmanager.dart';
-import '../../global.dart';
 import 'package:pickit_flutter/Keyword.dart';
+import 'package:pickit_flutter/models/recommended_keywords.dart';
+import 'package:pickit_flutter/global.dart';
+import 'package:pickit_flutter/KeywordManager.dart';
 
 class KeywordRegisterScreen extends StatefulWidget {
-  final Function(Keyword) onKeywordAdded; // Add this callback
+  final Function(Keyword) onKeywordAdded;
 
   const KeywordRegisterScreen({Key? key, required this.onKeywordAdded})
       : super(key: key);
@@ -17,37 +16,33 @@ class KeywordRegisterScreen extends StatefulWidget {
 
 class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
   final TextEditingController _controller = TextEditingController();
-  late KeywordManager keywordManager; // KeywordManager instance
+  late KeywordManager _keywordManager;
 
   @override
   void initState() {
     super.initState();
-    final userId = Global.getLoggedInUserId(); // Get logged-in userId
-    keywordManager = KeywordManager(userId); // Initialize KeywordManager
+    final userId = Global.getLoggedInUserId();
+    if (userId != null) {
+      _keywordManager = KeywordManager(userId);
+    } else {
+      print("로그인된 사용자 ID가 없습니다.");
+    }
   }
 
-  // Register and activate keyword
   Future<void> _registerAndActivateKeyword(String keywordText) async {
-    if (keywordManager.userId == null) {
-      print("User is not logged in.");
-      return;
-    }
-
     final keyword = Keyword(keywordText);
 
-    // Add and activate keyword
-    await keywordManager.addKeyword(keyword);
-    await keywordManager.activateKeyword(keyword);
-
-    // Remove from recommended list after registration
     setState(() {
       recommendedKeywords.removeWhere((k) => k.keyWord == keywordText);
     });
 
-    // Notify KeywordScreen via callback
-    widget.onKeywordAdded(keyword);
+    if (Global.getLoggedInUserId() != null) {
+      await _keywordManager.addKeyword(keyword);
+      widget.onKeywordAdded(keyword);
+    } else {
+      print("사용자 ID를 찾을 수 없습니다.");
+    }
 
-    // Show registration success message
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('키워드가 등록되었습니다.')),
     );
@@ -57,7 +52,7 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('키워드 추천&등록'),
+        title: const Text('키워드 추천&등록'),
         centerTitle: true,
       ),
       body: Column(
@@ -69,89 +64,53 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
                 Expanded(
                   child: TextFormField(
                     controller: _controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '키워드를 등록하세요',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 MaterialButton(
                   onPressed: () {
                     final keyword = _controller.text.trim();
                     if (keyword.isNotEmpty) {
                       _registerAndActivateKeyword(keyword);
-                      _controller.clear(); // Clear the input field
+                      _controller.clear();
                     }
                   },
-                  child: Text(
-                    '등록',
-                    style: TextStyle(fontSize: 18),
-                  ),
+                  child: const Text('등록', style: TextStyle(fontSize: 18)),
                   color: Colors.grey[700],
                   textColor: Colors.white,
                   height: 52,
-                  minWidth: 5,
                 ),
               ],
             ),
           ),
-          SizedBox(height: 15),
-          Text(
-            "🔥요새 키워드 트렌드",
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          SizedBox(height: 15),
-          // Trend keywords list
+          const SizedBox(height: 15),
+          Text("🔥요새 키워드 트렌드", style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 15),
           Expanded(
-            child: ListView.builder(
-              itemCount: recommendedKeywords.length,
-              itemBuilder: (context, index) {
-                final keyword = recommendedKeywords[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 32.0,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18.0),
-                      border: Border.all(
-                        color: Colors.grey.withOpacity(0.5),
-                        width: 1,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.3),
-                          spreadRadius: 2,
-                          blurRadius: 3,
-                          offset: Offset(1, 3),
+            child: recommendedKeywords.isNotEmpty
+                ? ListView.builder(
+                    itemCount: recommendedKeywords.length,
+                    itemBuilder: (context, index) {
+                      final keyword = recommendedKeywords[index];
+                      return ListTile(
+                        title: Text(keyword.keyWord),
+                        trailing: MaterialButton(
+                          onPressed: () =>
+                              _registerAndActivateKeyword(keyword.keyWord),
+                          child: const Text('등록'),
+                          color: Colors.grey[300],
                         ),
-                      ],
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        keyword.keyWord,
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      trailing: MaterialButton(
-                        onPressed: () {
-                          _registerAndActivateKeyword(keyword.keyWord);
-                        },
-                        color: Colors.grey[400],
-                        textColor: Colors.white,
-                        minWidth: 50,
-                        child: const Text(
-                          '등록',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
+                      );
+                    },
+                  )
+                : const Center(
+                    child:
+                        Text('추천 키워드가 없습니다.', style: TextStyle(fontSize: 16)),
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
