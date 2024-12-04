@@ -46,7 +46,8 @@ class _CustomFormState extends State<CustomForm> {
               controller: _userIdController), // 이메일 입력 필드
           SizedBox(height: mediumGap),
           CustomTextFormField("Password",
-              controller: _userPwdController), // 비밀번호 입력 필드
+              controller: _userPwdController, // 비밀번호 입력 필드
+              obscureText: true), // 비밀번호 숨김
           SizedBox(height: largeGap),
           TextButton(
             onPressed: () {
