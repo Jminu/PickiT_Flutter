@@ -1,16 +1,26 @@
-# pickit_flutter
+# PickiT
+PickiT은 사용자가 관심있는 키워드 기반으로 뉴스를 필터링하고, 관련 뉴스를 제공하는 앱입니다.
 
-pickIT Flutter project.
+사용자가 직접 설정한 키워드뿐만 아니라 추천 키워드를 기반으로 최신 뉴스를 손쉽게 찾아볼 수 있습니다.
 
-## Getting Started
+또한, 뉴스 본문의 핵심 내용을 빠르게 파악할 수 있도록 요약 기능을 제공하여, 시간 효율성을 극대화했습니다.
 
-This project is a starting point for a Flutter application.
+PickiT은 사용자 맞춤형 뉴스 제공과 정보 요약이라는 두 가지 핵심 기능을 제공합니다.
+## 기술 스택
+`Firebase Realtime DB`
 
-A few resources to get you started if this is your first Flutter project:
+사용자 정보, 스크랩 뉴스, 키워드 데이터를 효율적으로 저장하고 실시간 동기화 기능을 제공
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+`Firebase Cloud Functions`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+언론사 뉴스 크롤링, RSS Feed parsing 및 AI기반 요약 기능을 백엔드에서 자동화하여 처리
+
+`Flutter`
+
+크로스 플랫폼 개발을 통해 iOS와 Android에서 일관된 사용자 경험 제공
+
+## 시스템 구성
+
+![스크린샷 2024-12-06 오전 1 20 45](https://github.com/user-attachments/assets/4e48f0cb-46a9-4a05-96a7-109613e8aa98)
+## 핵심 기능
+
