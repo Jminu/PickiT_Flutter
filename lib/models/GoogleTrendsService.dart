@@ -44,6 +44,8 @@ class _GoogleTrendsScreenState extends State<GoogleTrendsScreen> {
         })();
       """);
 
+      print("result: $result");
+
       final keywords = result
           .toString()
           .replaceAll('"', '')
