@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 
 import './Keyword.dart';
-import './News.dart';
+import 'models/News.dart';
 
 class User {
   String userId;

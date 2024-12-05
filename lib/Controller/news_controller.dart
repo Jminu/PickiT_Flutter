@@ -1,4 +1,4 @@
-import '../News.dart';
+import '../models/News.dart';
 import '../components/news_service.dart';
 import '../global.dart';
 

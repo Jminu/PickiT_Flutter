@@ -1,5 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
-import '../News.dart';
+import '../models/News.dart';
 
 class NewsService {
   // 특정 사용자의 뉴스 스크랩 데이터를 참조하는 메소드
