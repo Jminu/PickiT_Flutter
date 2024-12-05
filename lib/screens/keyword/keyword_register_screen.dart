@@ -33,6 +33,9 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
   void _onKeywordsExtracted(List<Keyword> extractedKeywords) {
     setState(() {
       recommendedKeywords = extractedKeywords;
+      // 배열 로그 찍기
+      print(
+          "recommended Keywords: ${recommendedKeywords.map((k) => k.keyWord).toList()}");
     });
   }
 
@@ -110,7 +113,7 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
           ),
           const SizedBox(height: 15),
           SizedBox(
-            height: 50,
+            height: 2,
             child: GoogleTrendsScreen(
               onKeywordsExtracted: _onKeywordsExtracted,
             ),
