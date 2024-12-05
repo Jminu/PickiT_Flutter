@@ -110,7 +110,7 @@ class _KeywordRegisterScreenState extends State<KeywordRegisterScreen> {
           ),
           const SizedBox(height: 15),
           SizedBox(
-            height: 5,
+            height: 50,
             child: GoogleTrendsScreen(
               onKeywordsExtracted: _onKeywordsExtracted,
             ),
